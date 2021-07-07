@@ -9,7 +9,7 @@ export const User = observer(() => {
             <SimpleGrid minChildWidth="200px" spacing="10px" py="6">
                 <LinkBox as="article" w="200px" p="4" borderWidth="1px" rounded="md" key={'/admin'}>
                     <LinkOverlay href={'/admin'} target="__blank">
-                        <Text>{'Admin Panel'}</Text>
+                        <Text>{'User Panel'}</Text>
                     </LinkOverlay>
                 </LinkBox>
                 <LinkBox as="article" w="200px" p="4" borderWidth="1px" rounded="md" key={'user-panel'}>

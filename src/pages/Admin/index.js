@@ -14,7 +14,7 @@ export const Admin = observer(() => {
                 </LinkBox>
                 <LinkBox as="article" w="200px" p="4" borderWidth="1px" rounded="md" key={'user-panel'}>
                     <LinkOverlay href={'/user'} target="__blank">
-                        <Text>{'User Panel'}</Text>
+                        <Text>{'Admin Panel'}</Text>
                     </LinkOverlay>
                 </LinkBox>
             </SimpleGrid>

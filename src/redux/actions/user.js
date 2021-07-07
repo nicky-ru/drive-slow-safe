@@ -1,8 +1,8 @@
 import * as types from '../constants/types';
 
-export function updateUser(address) {
+export function isAdmin(_admin) {
     return {
-        type: types.user.UPDATE,
-        address
+        type: types.user.IS_ADMIN,
+        _admin
     };
 }

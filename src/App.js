@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
-import { useDispatch } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 
 import { ChakraProvider } from "@chakra-ui/react";
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-// import Dss from './contract/driveSlowSafe';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import {theme} from "./lib/theme";
 import {Header} from './components/Header/index'
 import {Start} from './pages/Start/index'
@@ -14,30 +13,45 @@ import {Vehicle} from "./pages/Vehicle";
 import {Device} from "./pages/Device";
 import {DataPoint} from "./pages/DataPoint";
 
-// import {updateContract} from "./redux/actions/contract";
-import {updateUser} from "./redux/actions/user";
+import {connect, updateAccount} from "./redux/actions/wallet";
+import {isAdmin} from "./redux/actions/user";
 
 
 function App() {
   // define App state helpers
-  // const admin = useSelector((state => state.contract.admin));
   const dispatch = useDispatch();
+  const connected = useSelector((state) => state.wallet.isConnected);
+  const contractAdmin = useSelector((state) => state.contract.admin);
 
   useEffect(() => {
-    // Dss.methods.administrator().call().then((admin) => dispatch(updateContract(
-    //     '0x311388275Ffe79Fd576b93f5431397A838604F5D',
-    //     admin
-    // )));
-
     const {ethereum} = window;
+
+    ethereum
+        .request({method: 'eth_accounts'})
+        .then(handleAccountsChanged)
+        .catch((err) => {
+          console.error(err);
+        })
+
     ethereum.on('accountsChanged', handleAccountsChanged);
-    dispatch(updateUser(ethereum.selectedAddress));
   }, []);
 
   const handleAccountsChanged = (accounts) => {
-    if (accounts.length > 0) {
-      dispatch(updateUser(accounts[0]));
+    if (accounts.length === 0) {
+      console.log('Please connect to MetaMask.');
+    } else {
+      if (!connected) dispatch(connect());
+
+      dispatch(updateAccount(accounts[0]));
+
+      dispatch(isAdmin(accounts[0].toUpperCase() === contractAdmin.toUpperCase()));
     }
+  }
+
+  const handleConnect = () => {
+    window.ethereum
+        .request({method: 'eth_requestAccounts'})
+        .then(handleAccountsChanged);
   }
 
   return (
@@ -45,7 +59,12 @@ function App() {
         <Router>
           <Header/>
           <Switch>
-            <Route path={'/'} exact key={'/'} component={Start}/>
+            <Route path={'/'} exact key={'/'}>
+              {connected ?
+                  <Redirect to={'/user'}/> :
+                  <Start handleConnect={handleConnect}/>
+              }
+            </Route>
             <Route path={'/admin'} exact key={'/admin'} component={Admin}/>
             <Route path={'/user'} exact key={'/user'} component={User}/>
             <Route path={'/device/:slug'} exact key={'/device/:slug'}><Device/></Route>

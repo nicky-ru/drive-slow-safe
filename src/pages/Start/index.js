@@ -1,23 +1,27 @@
 import React from 'react'
+import { useSelector} from "react-redux";
 import { observer } from 'mobx-react-lite';
-import { Container, SimpleGrid, LinkBox, LinkOverlay, Text } from '@chakra-ui/react';
+import { Container, Center, Heading, Button, VStack } from '@chakra-ui/react';
 
 
-export const Start = observer(() => {
+export const Start = observer((props) => {
+    const connected = useSelector((state => state.wallet.isConnected));
+
     return(
         <Container>
-            <SimpleGrid minChildWidth="200px" spacing="10px" py="6">
-                <LinkBox as="article" w="200px" p="4" borderWidth="1px" rounded="md" key={'/admin'}>
-                    <LinkOverlay href={'/admin'} target="__blank">
-                        <Text>{'Admin Panel'}</Text>
-                    </LinkOverlay>
-                </LinkBox>
-                <LinkBox as="article" w="200px" p="4" borderWidth="1px" rounded="md" key={'user-panel'}>
-                    <LinkOverlay href={'/user'} target="__blank">
-                        <Text>{'User Panel'}</Text>
-                    </LinkOverlay>
-                </LinkBox>
-            </SimpleGrid>
+            <Center>
+                <VStack>
+                    <Heading
+                        align={"center"}
+                    >
+                        Please connect metamask to proceed
+                    </Heading>
+                    {!connected &&
+                    <Button onClick={props.handleConnect} id={"connect-button"}>Connect</Button>
+                    }
+                    <Button id={"connected-button"} hidden={true}>Connected</Button>
+                </VStack>
+            </Center>
         </Container>
     );
 });

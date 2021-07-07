@@ -1,9 +1,15 @@
 export default {
+    wallet: {
+        isConnected: false,
+        chainId: '',
+        address: ''
+    },
     contract: {
-        address: '',
-        admin: ''
+        address: '0x311388275Ffe79Fd576b93f5431397A838604F5D',
+        admin: '0xF26a43cb8FF1fa90b603152B845A3E2de9c5Ba6F',
+        balance: 0
     },
     user: {
-        address: '0x0000000000000000000000000000000000000000'
+        isAdmin: false
     }
 }

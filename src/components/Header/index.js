@@ -5,10 +5,11 @@ import { CloseIcon, HamburgerIcon } from '@chakra-ui/icons';
 import { IoMoon, IoSunny } from 'react-icons/io5';
 import {useSelector} from "react-redux";
 
-export const Header = observer((props) => {
+export const Header = observer(() => {
     const { isOpen: isMobileNavOpen, onToggle } = useDisclosure();
     const { colorMode, toggleColorMode } = useColorMode();
-    const currentUser = useSelector((state => state.user.address));
+    const currentAccount = useSelector((state => state.wallet.address));
+    const userIsAdmin = useSelector((state) => state.user.isAdmin);
 
     return(
         <Box>
@@ -34,14 +35,15 @@ export const Header = observer((props) => {
                     <Flex flex={{ base: 1, md: 'auto' }} justify={{ base: 'center', md: 'start' }}>
                         <Stack as={'a'} direction={'row'} alignItems={'center'} spacing={{ base: 2, sm: 4 }}>
                             <Heading as={'h1'} fontSize={'xl'} display={{ base: 'none', md: 'block' }}>
-                                VacTracker
+                                DriveSlowSafe
                             </Heading>
                         </Stack>
                     </Flex>
 
                     <Stack direction={'row'} align={'center'} spacing={2} flex={{ base: 1, md: 'auto' }} justify={'flex-end'}>
                         <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
-                            <Text>{currentUser}</Text>
+                            {userIsAdmin ? <Text>Admin_</Text> : <Text>User_</Text>}
+                            <Text>{currentAccount}</Text>
                         </Flex>
                         <IconButton borderRadius="12" aria-label={'Toggle Color Mode'} onClick={toggleColorMode} icon={colorMode === 'light' ? <IoMoon size={18} /> : <IoSunny size={18} />} />
                     </Stack>
