@@ -11,6 +11,14 @@ export default {
         balance: 0
     },
     user: {
-        isAdmin: false
+        isAdmin: false,
+        policies: [],
+        penalties: []
+    },
+    policy: {
+
+    },
+    penalty: {
+
     }
 }

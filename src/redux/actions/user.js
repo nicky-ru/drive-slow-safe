@@ -6,3 +6,17 @@ export function isAdmin(_admin) {
         _admin
     };
 }
+
+export function setPolicies(policies) {
+    return {
+        type: types.user.SET_POLICIES,
+        policies,
+    };
+}
+
+export function setPenalties(penalties) {
+    return {
+        type: types.user.SET_PENALTIES,
+        penalties,
+    };
+}
