@@ -253,4 +253,8 @@ contract DriveSlowSafe {
     function showMyPenalties() public view returns(bytes32[] memory){
         return holders[msg.sender].penalties;
     }
+
+    function showMyPolicies() public view returns(bytes32[] memory) {
+        return holders[msg.sender].policies;
+    }
 }
