@@ -19,3 +19,15 @@ export function connect() {
         type: types.wallet.CONNECT
     };
 }
+
+export function lock() {
+    return {
+        type: types.wallet.LOCK
+    };
+}
+
+export function unlock() {
+    return {
+        type: types.wallet.UNLOCK
+    };
+}

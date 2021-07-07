@@ -1,6 +1,7 @@
 export default {
     wallet: {
         isConnected: false,
+        isLocked: true,
         chainId: '',
         address: ''
     },

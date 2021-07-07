@@ -4,21 +4,19 @@ import * as types from "../constants/types";
 export function wallet(state = initialState.wallet, action) {
     switch (action.type) {
         case types.wallet.CONNECT: {
-            let nextState = Object.assign({}, state);
-            nextState.isConnected = true;
-            return nextState;
+            return {...state, isConnected: true};
         }
         case types.wallet.UPDATE_ADDRESS: {
-            let { address } = action;
-            let nextState = Object.assign({}, state);
-            nextState.address = address;
-            return nextState;
+            return {...state, address: action.address};
         }
         case types.wallet.UPDATE_CHAIN: {
-            let { _chainId } = action;
-            let nextState = Object.assign({}, state);
-            nextState.chainId = _chainId;
-            return nextState;
+            return {...state, chainId: action.chainId};
+        }
+        case types.wallet.UNLOCK: {
+            return {...state, isLocked: false};
+        }
+        case types.wallet.LOCK: {
+            return {...state, isLocked: true};
         }
         default:
             return state;

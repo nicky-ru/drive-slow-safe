@@ -5,21 +5,16 @@ import { Container, Center, Heading, Button, VStack } from '@chakra-ui/react';
 
 
 export const Start = observer((props) => {
-    const connected = useSelector((state => state.wallet.isConnected));
-
     return(
         <Container>
-            <Center>
+            <Center h={"90vh"}>
                 <VStack>
                     <Heading
                         align={"center"}
                     >
                         Please connect metamask to proceed
                     </Heading>
-                    {!connected &&
                     <Button onClick={props.handleConnect} id={"connect-button"}>Connect</Button>
-                    }
-                    <Button id={"connected-button"} hidden={true}>Connected</Button>
                 </VStack>
             </Center>
         </Container>

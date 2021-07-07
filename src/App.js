@@ -13,18 +13,23 @@ import {Vehicle} from "./pages/Vehicle";
 import {Device} from "./pages/Device";
 import {DataPoint} from "./pages/DataPoint";
 
-import {connect, updateAccount} from "./redux/actions/wallet";
+import {updateAccount, unlock, lock} from "./redux/actions/wallet";
 import {isAdmin} from "./redux/actions/user";
 
 
 function App() {
   // define App state helpers
   const dispatch = useDispatch();
-  const connected = useSelector((state) => state.wallet.isConnected);
   const contractAdmin = useSelector((state) => state.contract.admin);
+  const isLocked = useSelector((state) => state.wallet.isLocked);
 
   useEffect(() => {
     const {ethereum} = window;
+
+    ethereum._metamask.isUnlocked()
+        .then((resp) => {
+          if (resp) dispatch(unlock);
+        });
 
     ethereum
         .request({method: 'eth_accounts'})
@@ -39,19 +44,31 @@ function App() {
   const handleAccountsChanged = (accounts) => {
     if (accounts.length === 0) {
       console.log('Please connect to MetaMask.');
+      dispatch(lock());
     } else {
-      if (!connected) dispatch(connect());
-
       dispatch(updateAccount(accounts[0]));
-
       dispatch(isAdmin(accounts[0].toUpperCase() === contractAdmin.toUpperCase()));
     }
   }
 
   const handleConnect = () => {
+    document.getElementById("connect-button").hidden = true;
+
     window.ethereum
         .request({method: 'eth_requestAccounts'})
-        .then(handleAccountsChanged);
+        .then((accounts) => {
+          handleAccountsChanged(accounts);
+          window.location.assign('/user');
+        })
+        .catch((err) => {
+          if (err.code === 4001) {
+            // EIP-1193 userRejectedRequest error
+            // If this happens, the user rejected the connection request.
+            console.log('Please connect to MetaMask.');
+          } else {
+            console.error(err);
+          }
+        });
   }
 
   return (
@@ -60,9 +77,9 @@ function App() {
           <Header/>
           <Switch>
             <Route path={'/'} exact key={'/'}>
-              {connected ?
-                  <Redirect to={'/user'}/> :
-                  <Start handleConnect={handleConnect}/>
+              {isLocked ?
+                  <Start handleConnect={handleConnect}/> :
+                  <Redirect to={'/user'}/>
               }
             </Route>
             <Route path={'/admin'} exact key={'/admin'} component={Admin}/>
