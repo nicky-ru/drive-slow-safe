@@ -1,5 +1,4 @@
 import React from 'react'
-import { useSelector} from "react-redux";
 import { observer } from 'mobx-react-lite';
 import { Container, Center, Heading, Button, VStack } from '@chakra-ui/react';
 

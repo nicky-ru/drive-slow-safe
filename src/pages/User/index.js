@@ -32,7 +32,7 @@ export const User = observer(() => {
     }, [currentAccount]);
 
     return(
-        <Container >
+        <Container>
             <Tabs>
                 <TabList>
                     <Tab>My Policies</Tab>

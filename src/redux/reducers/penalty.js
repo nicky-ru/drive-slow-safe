@@ -1,13 +1,13 @@
 import initialState from "../constants/initialState";
 import * as types from "../constants/types";
 
-export function policy(state = initialState.policy, action) {
+export function penalty(state = initialState.penalty, action) {
     switch (action.type) {
-        case types.policy.ADD: {
-            let { policyId, policy } = action;
+        case types.penalty.ADD: {
+            let { penaltyId, penalty } = action;
             let nextState = Object.assign({}, state);
-            if (!nextState[policyId]) {
-                nextState[policyId] = policy;
+            if (!nextState[penaltyId]) {
+                nextState[penaltyId] = penalty;
             }
             return nextState;
         }

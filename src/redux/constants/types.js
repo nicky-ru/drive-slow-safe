@@ -20,3 +20,7 @@ export const user = {
 export const policy = {
     ADD: 'dss/policy/add',
 }
+
+export const penalty = {
+    ADD: 'dss/penalty/add',
+}

@@ -13,22 +13,22 @@ export const PolicyList = observer(() => {
             align="stretch"
         >
             {policies[policyIds[0]] && policyIds.map((policyId) => (
-                <Box key={policies[policyId].policyHolder}
+                <Box key={policyId}
                      border={"1px"}
                      borderColor={"dark.100"}
                      borderRadius={16}
                      display="flex"
                      alignItems="center"
                      justifyContent="space-between">
-                    <Text marginLeft={"10px"}>{policies[policyId].policyHolder}</Text>
+                    <Text marginLeft={"10px"}>{policyId}</Text>
                     <Link
-                        href={`/policy/${policies[policyId].policyHolder}`}
-                        params={{ policy: policies[policyId].policyHolder }}>
+                        href={`/policy/${policyId}`}
+                        params={{ policy: policyId }}>
                         <Button type={"button"}>View</Button>
                     </Link>
                 </Box>
             ))}
-            {policies.length === 0 &&
+            {policyIds.length === 0 &&
                 <Text>You have no policies yet</Text>
             }
         </VStack>
