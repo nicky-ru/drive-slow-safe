@@ -1,6 +1,6 @@
 import React from 'react';
 import {observer} from "mobx-react-lite";
-import {VStack, HStack, Box, Text, Button, Link} from '@chakra-ui/react';
+import {VStack, HStack, Box, Text, Link} from '@chakra-ui/react';
 import {Link as ReachLink, useParams} from 'react-router-dom';
 import {useSelector} from "react-redux";
 
@@ -10,6 +10,10 @@ export const PolicyInfo = observer(() => {
 
     return(
         <VStack align={"left"}>
+            <HStack>
+                <Box w={"25%"}>Policy ID:</Box>
+                <Box maxWidth={"70%"}><Text isTruncated>{slug}</Text></Box>
+            </HStack>
             <HStack>
                 <Box w={"25%"}>Status:</Box>
                 <Box>{policy.status ? <Text>Active</Text> : <Text>Not active</Text>}</Box>

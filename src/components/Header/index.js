@@ -1,7 +1,8 @@
 import React from 'react'
 import { observer } from 'mobx-react-lite';
-import { Box, Flex, Container, Stack, useDisclosure, IconButton, useColorModeValue, useColorMode, Heading, Text } from '@chakra-ui/react'
+import { Box, Flex, Container, Stack, useDisclosure, IconButton, useColorModeValue, useColorMode, Heading, Text, Link } from '@chakra-ui/react'
 import { CloseIcon, HamburgerIcon } from '@chakra-ui/icons';
+import {Link as ReachLink} from 'react-router-dom';
 import { IoMoon, IoSunny } from 'react-icons/io5';
 import {useSelector} from "react-redux";
 
@@ -34,9 +35,11 @@ export const Header = observer(() => {
 
                     <Flex flex={{ base: 1, md: 'auto' }} justify={{ base: 'center', md: 'start' }}>
                         <Stack as={'a'} direction={'row'} alignItems={'center'} spacing={{ base: 2, sm: 4 }}>
-                            <Heading as={'h1'} fontSize={'xl'} display={{ base: 'none', md: 'block' }}>
-                                DriveSlowSafe
-                            </Heading>
+                            <Link as={ReachLink} to={"/user"} style={{ textDecoration: 'none'}}>
+                                <Heading as={'h1'} fontSize={'xl'} display={{ base: 'none', md: 'block' }}>
+                                    DriveSlowSafe
+                                </Heading>
+                            </Link>
                         </Stack>
                     </Flex>
 
