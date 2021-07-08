@@ -24,3 +24,7 @@ export const policy = {
 export const penalty = {
     ADD: 'dss/penalty/add',
 }
+
+export const vehicle = {
+    GET: 'dss/vehicle/get',
+}

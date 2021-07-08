@@ -5,6 +5,7 @@ import { contract } from "./contract";
 import { wallet } from "./wallet";
 import { policy } from "./policy";
 import { penalty } from "./penalty";
+import { vehicle } from "./vehicle";
 
 const rootReducer = combineReducers({
     wallet,
@@ -12,5 +13,6 @@ const rootReducer = combineReducers({
     user,
     policy,
     penalty,
+    vehicle,
 });
 export default rootReducer;

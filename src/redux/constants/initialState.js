@@ -20,5 +20,10 @@ export default {
     },
     penalty: {
 
+    },
+    vehicle: {
+        brand: '',
+        model: '',
+        year: '',
     }
 }
