@@ -19,6 +19,7 @@ export const user = {
 
 export const policy = {
     ADD: 'dss/policy/add',
+    GET: 'dss/policy/get',
 }
 
 export const penalty = {

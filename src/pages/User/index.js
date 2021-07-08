@@ -7,22 +7,16 @@ import {DataPointList} from "../../components/DataPoint/dataPointList";
 import smartContract from '../../contract/driveSlowSafe';
 import {setPolicies, setPenalties} from "../../redux/actions/user";
 import {useSelector, useDispatch} from "react-redux";
-import {addPolicy} from "../../redux/actions/policy";
 
 export const User = observer(() => {
     const dispatch = useDispatch();
     const currentAccount = useSelector((state) => state.wallet.address);
+
     useEffect(() => {
         if (currentAccount !== '') {
             smartContract.methods.showMyPolicies().call({from:currentAccount})
                 .then((policies) => {
                     dispatch(setPolicies(policies));
-                    policies.map((policy) => {
-                        smartContract.methods.policies(policy).call()
-                            .then((policyContent) => {
-                                dispatch(addPolicy(policy, policyContent));
-                            })
-                    })
                 })
             smartContract.methods.showMyPenalties().call({from:currentAccount})
                 .then((penalties) => {

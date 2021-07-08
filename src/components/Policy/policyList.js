@@ -6,14 +6,13 @@ import {useSelector} from "react-redux";
 
 export const PolicyList = observer(() => {
     const policyIds = useSelector((state) => state.user.policies);
-    const policies = useSelector((state) => state.policy);
 
     return(
         <VStack
             spacing={4}
             align="stretch"
         >
-            {policies[policyIds[0]] && policyIds.map((policyId) => (
+            {policyIds.length > 0 && policyIds.map((policyId) => (
                 <Box key={policyId}
                      border={"1px"}
                      borderColor={"dark.100"}

@@ -11,6 +11,10 @@ export function policy(state = initialState.policy, action) {
             }
             return nextState;
         }
+        case types.policy.GET: {
+            let { status, holderId, vehicleId, deviceId, premium, lockedFunds } = action;
+            return {...state, status: status, holderId: holderId, vehicleId: vehicleId, deviceId: deviceId, premium: premium, lockedFunds: lockedFunds};
+        }
         default:
             return state;
     }

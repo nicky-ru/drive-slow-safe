@@ -16,7 +16,12 @@ export default {
         penalties: []
     },
     policy: {
-
+        status: false,
+        holderId: '',
+        vehicleId: '',
+        deviceId: '',
+        premium: 0,
+        lockedFunds: 0,
     },
     penalty: {
 
