@@ -1,5 +1,6 @@
 import React from 'react';
 import {VStack, Box, Text, Link, Button} from '@chakra-ui/react';
+import {Link as ReachLink} from 'react-router-dom';
 import {observer} from "mobx-react-lite";
 import {useSelector} from "react-redux";
 
@@ -22,7 +23,8 @@ export const PolicyList = observer(() => {
                      justifyContent="space-between">
                     <Text marginLeft={"10px"}>{policyId}</Text>
                     <Link
-                        href={`/policy/${policyId}`}
+                        as={ReachLink}
+                        to={`/policy/${policyId}`}
                         params={{ policy: policyId }}>
                         <Button type={"button"}>View</Button>
                     </Link>
