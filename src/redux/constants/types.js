@@ -29,3 +29,7 @@ export const penalty = {
 export const vehicle = {
     GET: 'dss/vehicle/get',
 }
+
+export const device = {
+    GET: 'dss/device/get',
+}

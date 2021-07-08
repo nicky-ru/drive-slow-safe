@@ -30,5 +30,14 @@ export default {
         brand: '',
         model: '',
         year: '',
+    },
+    dataPoint: {
+        speed: 0,
+    },
+    device: {
+        imei: '',
+        hasOrder: false,
+        status: 0,
+        policyId: '',
     }
 }
