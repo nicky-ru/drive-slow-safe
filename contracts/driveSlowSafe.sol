@@ -74,12 +74,13 @@ contract DriveSlowSafe {
     bytes32[] public vehiclesIds;
     bytes32[] public deviceIDs;
     bytes32[] public policyIDs;
+    address[] public partnersIDs;
     mapping (address => Holder) private holders;
     mapping (bytes32 => Vehicle) private vehicles;
     mapping (address => Device) private devices;
     mapping (bytes32 => Policy) private policies;
     mapping (bytes32 => DataPoint) private dataPoints;
-    mapping (address => Partner) public partners;
+    mapping (address => Partner) private partners;
 
     uint32 public alpha = 10;  // to calculate multipliers of users
     uint32 public speed = 50;  // maximal allowed speed
@@ -313,5 +314,9 @@ contract DriveSlowSafe {
         dataPoints[_dataPointId].longitude,
         dataPoints[_dataPointId].timestamp
         );
+    }
+
+    function getPartner(address _partnerId) public view returns(string memory) {
+        return partners[_partnerId].name;
     }
 }
