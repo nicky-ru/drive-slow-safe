@@ -78,7 +78,7 @@ contract DriveSlowSafe {
     mapping (bytes32 => Vehicle) private vehicles;
     mapping (address => Device) private devices;
     mapping (bytes32 => Policy) private policies;
-    mapping (bytes32 => DataPoint) public dataPoints;
+    mapping (bytes32 => DataPoint) private dataPoints;
     mapping (address => Partner) public partners;
 
     uint32 public alpha = 10;  // to calculate multipliers of users
@@ -301,6 +301,17 @@ contract DriveSlowSafe {
         policies[_policyId].premium,
         policies[_policyId].locked,
         policies[_policyId].fundsUsed
+        );
+    }
+
+    function getDataPoint(bytes32 _dataPointId) public view returns(string memory, string memory, string memory, string memory, string memory, string memory) {
+        return (
+        dataPoints[_dataPointId].accelerometer[0],
+        dataPoints[_dataPointId].accelerometer[1],
+        dataPoints[_dataPointId].accelerometer[2],
+        dataPoints[_dataPointId].latitude,
+        dataPoints[_dataPointId].longitude,
+        dataPoints[_dataPointId].timestamp
         );
     }
 }
