@@ -39,12 +39,13 @@ contract DriveSlowSafe {
     struct Policy {
         bool isActive;
         address policyHolder;
-        bytes32 car;
+        bytes32 vehicle;
         address device;
         // string startDate;
         // string endDate;
         uint256 premium;
         uint256 locked;
+        uint256 fundsUsed;
     }
 
     /// Will be used to store meaningful data data points
@@ -72,10 +73,11 @@ contract DriveSlowSafe {
     address[] public holdersIDs;
     bytes32[] public vehiclesIds;
     bytes32[] public deviceIDs;
+    bytes32[] public policyIDs;
     mapping (address => Holder) private holders;
     mapping (bytes32 => Vehicle) private vehicles;
     mapping (address => Device) private devices;
-    mapping (bytes32 => Policy) public policies;
+    mapping (bytes32 => Policy) private policies;
     mapping (bytes32 => DataPoint) public dataPoints;
     mapping (address => Partner) public partners;
 
@@ -128,13 +130,13 @@ contract DriveSlowSafe {
             activateAccount(msg.sender);
         }
 
-        bytes32 _car = registerCar(_brand, _model, _year);
-        bytes32 hash = keccak256(abi.encodePacked(msg.sender, _car, _device, msg.value));
+        bytes32 _vehicleId = registerVehicle(_brand, _model, _year);
+        bytes32 hash = keccak256(abi.encodePacked(msg.sender, _vehicleId, _device, msg.value));
 
         // Record policy
         uint256 toLock = holders[msg.sender].multiplier * msg.value;
         require(toLock <= balance, "The contract balance is insuficient to guarantee this policy");
-        policies[hash] = Policy(true, msg.sender, _car, _device, msg.value, toLock);
+        policies[hash] = Policy(true, msg.sender, _vehicleId, _device, msg.value, toLock, 0);
 
         // add premium and supstract locked funds to the contract balance
         balance -= toLock;
@@ -160,6 +162,7 @@ contract DriveSlowSafe {
         // the funds that the contract should transfer to the partner
         uint256 toPay = msg.value + grant;
         policies[_policy].locked -= cleanGrant;
+        policies[_policy].fundsUsed += grant;
 
         _partner.transfer(toPay);
     }
@@ -228,7 +231,7 @@ contract DriveSlowSafe {
         }
     }
 
-    function registerCar(string memory _brand, string memory _model, string memory _year) internal returns(bytes32 car_hash) {
+    function registerVehicle(string memory _brand, string memory _model, string memory _year) internal returns(bytes32 car_hash) {
         car_hash = keccak256(abi.encodePacked(_brand, _model, _year));
         require(!vehicles[car_hash].registered, "This car has already been registered");
 
@@ -286,6 +289,18 @@ contract DriveSlowSafe {
         devices[_deviceId].hasOrder,
         devices[_deviceId].status,
         devices[_deviceId].policy
+        );
+    }
+
+    function getPolicy(bytes32 _policyId) public view returns(bool, address, bytes32, address, uint256, uint256, uint256) {
+        return (
+        policies[_policyId].isActive,
+        policies[_policyId].policyHolder,
+        policies[_policyId].vehicle,
+        policies[_policyId].device,
+        policies[_policyId].premium,
+        policies[_policyId].locked,
+        policies[_policyId].fundsUsed
         );
     }
 }
