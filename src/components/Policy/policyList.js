@@ -21,7 +21,7 @@ export const PolicyList = observer(() => {
                      display="flex"
                      alignItems="center"
                      justifyContent="space-between">
-                    <Text marginLeft={"10px"}>{policyId}</Text>
+                    <Text marginLeft={"10px"} isTruncated>{policyId}</Text>
                     <Link
                         as={ReachLink}
                         to={`/policy/${policyId}`}

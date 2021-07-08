@@ -1,7 +1,7 @@
 import React from 'react';
 import {observer} from "mobx-react-lite";
-import {VStack, HStack, Box, Text} from '@chakra-ui/react';
-import {useParams} from 'react-router-dom';
+import {VStack, HStack, Box, Text, Button, Link} from '@chakra-ui/react';
+import {Link as ReachLink, useParams} from 'react-router-dom';
 import {useSelector} from "react-redux";
 
 export const PolicyInfo = observer(() => {
@@ -18,15 +18,35 @@ export const PolicyInfo = observer(() => {
                     </HStack>
                     <HStack>
                         <Box w={"25%"}>Policy Holder ID:</Box>
-                        <Box>{policy.policyHolder}</Box>
+                        <Box maxWidth={"70%"}>
+                            <Link
+                                as={ReachLink}
+                                to={`/user`}>
+                                <Text isTruncated>{policy.policyHolder}</Text>
+                            </Link>
+                        </Box>
                     </HStack>
                     <HStack>
                         <Box w={"25%"}>Vehicle ID:</Box>
-                        <Box maxWidth={"70%"}><Text isTruncated>{policy.car}</Text></Box>
+                        <Box maxWidth={"70%"}>
+                            <Link
+                                as={ReachLink}
+                                to={`/vehicle/${policy.car}`}
+                                params={{ vehicle: policy.car }}>
+                                <Text isTruncated>{policy.car}</Text>
+                            </Link>
+                        </Box>
                     </HStack>
                     <HStack>
                         <Box w={"25%"}>Device ID:</Box>
-                        <Box>{policy.device}</Box>
+                        <Box maxWidth={"70%"}>
+                            <Link
+                                as={ReachLink}
+                                to={`/device/${policy.device}`}
+                                params={{ device: policy.device }}>
+                                <Text isTruncated>{policy.device}</Text>
+                            </Link>
+                        </Box>
                     </HStack>
                     <HStack>
                         <Box w={"25%"}>Premium:</Box>
