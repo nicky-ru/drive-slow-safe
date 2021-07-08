@@ -17,7 +17,7 @@ contract DriveSlowSafe {
     }
 
     /// WHAT
-    struct Car {
+    struct Vehicle {
         bool registered;
         string brand;
         string model;
@@ -70,9 +70,10 @@ contract DriveSlowSafe {
     /// STORAGE MAPPINGS
     address payable public administrator;
     address[] public holdersIDs;
+    bytes32[] public vehiclesIds;
     bytes32[] public deviceIDs;
     mapping (address => Holder) private holders;
-    mapping (bytes32 => Car) public cars;
+    mapping (bytes32 => Vehicle) private vehicles;
     mapping (address => Device) public devices;
     mapping (bytes32 => Policy) public policies;
     mapping (bytes32 => DataPoint) public dataPoints;
@@ -229,9 +230,9 @@ contract DriveSlowSafe {
 
     function registerCar(string memory _brand, string memory _model, string memory _year) internal returns(bytes32 car_hash) {
         car_hash = keccak256(abi.encodePacked(_brand, _model, _year));
-        require(!cars[car_hash].registered, "This car has already been registered");
+        require(!vehicles[car_hash].registered, "This car has already been registered");
 
-        cars[car_hash] = Car(true, _brand, _model, _year);
+        vehicles[car_hash] = Vehicle(true, _brand, _model, _year);
         return car_hash;
     }
 
@@ -268,6 +269,14 @@ contract DriveSlowSafe {
         holders[_holderId].accumulatedKM,
         holders[_holderId].penalties,
         holders[_holderId].policies
+        );
+    }
+
+    function getVehicle(bytes32 _vehicleId) public view returns(string memory, string memory, string memory) {
+        return (
+        vehicles[_vehicleId].brand,
+        vehicles[_vehicleId].model,
+        vehicles[_vehicleId].year
         );
     }
 }
