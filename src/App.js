@@ -15,6 +15,7 @@ import {DataPoint} from "./pages/DataPoint";
 
 import {updateAccount, unlock, lock} from "./redux/actions/wallet";
 import {isAdmin} from "./redux/actions/user";
+import {ToolConfig} from "./pages/Admin/tools";
 
 
 function App() {
@@ -88,6 +89,9 @@ function App() {
             <Route path={'/policy/:slug'} exact key={'/policy/:slug'}><Policy/></Route>
             <Route path={'/vehicle/:slug'} exact key={'/vehicle/:slug'}><Vehicle/></Route>
             <Route path={'/data_point/:slug'} exact key={'/data_point/:slug'}><DataPoint/></Route>
+              {ToolConfig.tools.map((i) => (
+                  <Route path={ToolConfig[i].path} exact key={ToolConfig[i].path} component={ToolConfig[i].component}/>
+              ))}
           </Switch>
         </Router>
       </ChakraProvider>
