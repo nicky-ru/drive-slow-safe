@@ -69,8 +69,9 @@ contract DriveSlowSafe {
 
     /// STORAGE MAPPINGS
     address payable public administrator;
+    address[] public holdersIDs;
     bytes32[] public deviceIDs;
-    mapping (address => Holder) public holders;
+    mapping (address => Holder) private holders;
     mapping (bytes32 => Car) public cars;
     mapping (address => Device) public devices;
     mapping (bytes32 => Policy) public policies;
@@ -256,5 +257,17 @@ contract DriveSlowSafe {
 
     function showMyPolicies() public view returns(bytes32[] memory) {
         return holders[msg.sender].policies;
+    }
+
+    function getHolder(address _holderId) public view returns(bool, uint256, uint256, uint256, uint, bytes32[] memory, bytes32[] memory) {
+        return (
+        holders[_holderId].isActive,
+        holders[_holderId].rating,
+        holders[_holderId].multiplier,
+        holders[_holderId].penaltyMultiplier,
+        holders[_holderId].accumulatedKM,
+        holders[_holderId].penalties,
+        holders[_holderId].policies
+        );
     }
 }
