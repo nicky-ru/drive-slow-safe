@@ -74,7 +74,7 @@ contract DriveSlowSafe {
     bytes32[] public deviceIDs;
     mapping (address => Holder) private holders;
     mapping (bytes32 => Vehicle) private vehicles;
-    mapping (address => Device) public devices;
+    mapping (address => Device) private devices;
     mapping (bytes32 => Policy) public policies;
     mapping (bytes32 => DataPoint) public dataPoints;
     mapping (address => Partner) public partners;
@@ -277,6 +277,15 @@ contract DriveSlowSafe {
         vehicles[_vehicleId].brand,
         vehicles[_vehicleId].model,
         vehicles[_vehicleId].year
+        );
+    }
+
+    function getDevice(address _deviceId) public view returns(string memory, bool, Status, bytes32) {
+        return (
+        devices[_deviceId].imei,
+        devices[_deviceId].hasOrder,
+        devices[_deviceId].status,
+        devices[_deviceId].policy
         );
     }
 }
