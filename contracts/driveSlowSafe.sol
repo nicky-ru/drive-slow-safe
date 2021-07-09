@@ -288,7 +288,7 @@ contract DriveSlowSafe {
         return policyIDs;
     }
 
-    function getPartner(address _partnerId) public view returns(string memory) {
-        return partners[_partnerId].name;
+    function getPartnerIds() public view returns(address[] memory) {
+        return partnersIDs;
     }
 }
