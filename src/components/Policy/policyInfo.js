@@ -23,7 +23,8 @@ export const PolicyInfo = observer(() => {
                 <Box maxWidth={"70%"}>
                     <Link
                         as={ReachLink}
-                        to={`/user`}>
+                        to={`/holder/${policy.holderId}`}
+                        params={{ holder: policy.holderId }}>
                         <Text isTruncated>{policy.holderId}</Text>
                     </Link>
                 </Box>

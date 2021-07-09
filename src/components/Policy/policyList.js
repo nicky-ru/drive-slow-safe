@@ -3,6 +3,7 @@ import {VStack, Box, Text, Link, Button} from '@chakra-ui/react';
 import {Link as ReachLink} from 'react-router-dom';
 import {observer} from "mobx-react-lite";
 import {useSelector} from "react-redux";
+import {PolicyModal} from "./policyModal";
 
 export const PolicyList = observer(() => {
     const policyIds = useSelector((state) => state.user.policies);
@@ -32,6 +33,7 @@ export const PolicyList = observer(() => {
             {policyIds.length === 0 &&
                 <Text>You have no policies yet</Text>
             }
+            <PolicyModal/>
         </VStack>
     );
 })

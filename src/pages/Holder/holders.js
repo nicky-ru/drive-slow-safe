@@ -1,33 +1,33 @@
 import React, {useEffect} from 'react';
 import {observer} from "mobx-react-lite";
 import {Container, Tab, TabList, TabPanel, TabPanels, Tabs} from '@chakra-ui/react';
-import {PartnersList} from "../../components/Partner/partnersList";
+import {HoldersList} from "../../components/Holder/holdersList";
 import {useDispatch, useSelector} from "react-redux";
 import smartContract from "../../contract/driveSlowSafe";
-import {setPolicies} from "../../redux/actions/contract";
-import {PolicyListAdmin} from "../../components/Policy/policyListAdmin";
+import {setHolders} from "../../redux/actions/contract";
 
-export const Partners = observer(() => {
+export const Holders = observer(() => {
     const dispatch = useDispatch();
     const currentAccount = useSelector((state) => state.wallet.address);
     const admin = useSelector((state) => state.contract.admin);
 
     useEffect(() => {
-        // smartContract.methods.getPolicyIds().call()
-        //     .then((policyIds) => dispatch(setPolicies(policyIds)));
-        //
+        if (currentAccount.toUpperCase() === admin.toUpperCase()) {
+            smartContract.methods.getHoldersIds().call()
+                .then((holdersIds) => dispatch(setHolders(holdersIds)));
+        }
     }, [currentAccount]);
 
     return(
         <Container>
             <Tabs isFitted>
                 <TabList>
-                    <Tab>All partners</Tab>
+                    <Tab>All holders</Tab>
                 </TabList>
 
                 <TabPanels>
                     <TabPanel>
-                        <PartnersList/>
+                        <HoldersList/>
                     </TabPanel>
                 </TabPanels>
 

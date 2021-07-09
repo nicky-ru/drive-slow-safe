@@ -44,5 +44,11 @@ export default {
         hasOrder: false,
         status: 0,
         policyId: '',
+    },
+    holder: {
+        rating: 0,
+        multiplier: 0,
+        penaltyMultiplier: 0,
+        accumulatedKM: 0,
     }
 }

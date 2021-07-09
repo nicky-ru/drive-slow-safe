@@ -1,6 +1,6 @@
 import { Devices } from "../Device/devices";
 import { Policies } from "../Policy/policies";
-import { Holders } from "../User/holders";
+import { Holders } from "../Holder/holders";
 import { Vehicles } from "../Vehicle/vehicles";
 import { DataPointList } from "../../components/DataPoint/dataPointList";
 import { ClaimsList } from "../../components/Claim/claimsList";

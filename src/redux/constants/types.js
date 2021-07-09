@@ -22,6 +22,10 @@ export const user = {
     SET_PENALTIES: 'dss/user/setPenalties',
 }
 
+export const holder = {
+    GET: 'dss/holder/get',
+}
+
 export const policy = {
     ADD: 'dss/policy/add',
     GET: 'dss/policy/get',
