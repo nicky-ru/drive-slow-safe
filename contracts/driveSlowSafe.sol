@@ -70,11 +70,11 @@ contract DriveSlowSafe {
 
     /// STORAGE MAPPINGS
     address payable public administrator;
-    address[] public holdersIDs;
-    bytes32[] public vehiclesIds;
-    bytes32[] public deviceIDs;
-    bytes32[] public policyIDs;
-    address[] public partnersIDs;
+    address[] private holdersIDs;
+    bytes32[] private vehiclesIds;
+    bytes32[] private deviceIDs;
+    bytes32[] private policyIDs;
+    address[] private partnersIDs;
     mapping (address => Holder) private holders;
     mapping (bytes32 => Vehicle) private vehicles;
     mapping (address => Device) private devices;
@@ -82,8 +82,8 @@ contract DriveSlowSafe {
     mapping (bytes32 => DataPoint) private dataPoints;
     mapping (address => Partner) private partners;
 
-    uint32 public alpha = 10;  // to calculate multipliers of users
-    uint32 public speed = 50;  // maximal allowed speed
+    uint32 private alpha = 10;  // to calculate multipliers of users
+    uint32 private speed = 50;  // maximal allowed speed
     uint256 public balance;
 
     constructor() public payable {
@@ -276,12 +276,20 @@ contract DriveSlowSafe {
         );
     }
 
+    function getHoldersIds() public view onlyAdministrator returns(address[] memory) {
+        return holdersIDs;
+    }
+
     function getVehicle(bytes32 _vehicleId) public view returns(string memory, string memory, string memory) {
         return (
         vehicles[_vehicleId].brand,
         vehicles[_vehicleId].model,
         vehicles[_vehicleId].year
         );
+    }
+
+    function getVehicleIds() public view onlyAdministrator returns(bytes32[] memory) {
+        return vehiclesIds;
     }
 
     function getDevice(address _deviceId) public view returns(string memory, bool, Status, bytes32) {
@@ -291,6 +299,10 @@ contract DriveSlowSafe {
         devices[_deviceId].status,
         devices[_deviceId].policy
         );
+    }
+
+    function getDeviceIds() public view onlyAdministrator returns(address[] memory) {
+        return deviceIDs;
     }
 
     function getPolicy(bytes32 _policyId) public view returns(bool, address, bytes32, address, uint256, uint256, uint256) {
@@ -303,6 +315,10 @@ contract DriveSlowSafe {
         policies[_policyId].locked,
         policies[_policyId].fundsUsed
         );
+    }
+
+    function getPolicyIds() public view onlyAdministrator returns(bytes32[] memory) {
+        return policyIDs;
     }
 
     function getDataPoint(bytes32 _dataPointId) public view returns(string memory, string memory, string memory, string memory, string memory, string memory) {
@@ -318,5 +334,9 @@ contract DriveSlowSafe {
 
     function getPartner(address _partnerId) public view returns(string memory) {
         return partners[_partnerId].name;
+    }
+
+    function getPartnersIds() public view returns(address[] memory) {
+        return partnersIDs;
     }
 }
