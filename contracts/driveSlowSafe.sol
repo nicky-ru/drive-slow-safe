@@ -78,12 +78,12 @@ contract DriveSlowSafe {
     address[] private deviceIDs;
     bytes32[] private policyIDs;
     address[] private partnersIDs;
-    mapping (address => Holder) private holders;
-    mapping (bytes32 => Vehicle) private vehicles;
-    mapping (address => Device) private devices;
-    mapping (bytes32 => Policy) private policies;
-    mapping (bytes32 => DataPoint) private dataPoints;
-    mapping (address => Partner) private partners;
+    mapping (address => Holder) public holders;
+    mapping (bytes32 => Vehicle) public vehicles;
+    mapping (address => Device) public devices;
+    mapping (bytes32 => Policy) public policies;
+    mapping (bytes32 => DataPoint) public dataPoints;
+    mapping (address => Partner) public partners;
 
     uint32 private alpha = 10;  // to calculate multipliers of users
     uint32 private speed = 50;  // maximal allowed speed
