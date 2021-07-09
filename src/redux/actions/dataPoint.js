@@ -1,11 +1,20 @@
 import * as types from '../constants/types';
 
-export function getDevice(imei, hasOrder, status, policyId) {
+// export function getDataPoint(accelerometer, latitude, longitude, timestamp) {
+//     return {
+//         type: types.device.GET,
+//         accelerometer,
+//         latitude,
+//         longitude,
+//         timestamp,
+//     }
+// }
+
+export function getDataPoint(latitude, longitude, timestamp) {
     return {
-        type: types.device.GET,
-        imei,
-        hasOrder,
-        status,
-        policyId,
+        type: types.dataPoint.GET,
+        latitude,
+        longitude,
+        timestamp,
     }
 }

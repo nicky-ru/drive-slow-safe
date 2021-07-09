@@ -5,14 +5,13 @@ import {useSelector} from "react-redux";
 
 export const DataPointList = observer(() => {
     const penaltyIds = useSelector((state) => state.user.penalties);
-    const penalties = useSelector((state) => state.penalty);
 
     return (
         <VStack
             spacing={4}
             align="stretch"
         >
-            {penalties[penaltyIds[0]] && penaltyIds.map((penaltyId) => (
+            {penaltyIds.length > 0 && penaltyIds.map((penaltyId) => (
                 <Box key={penaltyId}
                      border={"1px"}
                      borderColor={"dark.100"}
@@ -20,7 +19,7 @@ export const DataPointList = observer(() => {
                      display="flex"
                      alignItems="center"
                      justifyContent="space-between">
-                    <Text marginLeft={"10px"}>{penalties[penaltyId].timestamp}</Text>
+                    <Text marginLeft={"10px"} isTruncated>{penaltyId}</Text>
                     <Link href={`/data_point/${penaltyId}`} params={{ data_point: penaltyId }}><Button type={"button"}>View</Button></Link>
                 </Box>
             ))}

@@ -1,23 +1,29 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import { observer } from 'mobx-react-lite';
-import { Container, SimpleGrid, LinkBox, LinkOverlay, Text } from '@chakra-ui/react';
+import { Container, Heading } from '@chakra-ui/react';
+import {useParams} from 'react-router-dom';
+import smartContract from '../../contract/driveSlowSafe';
+import {useDispatch} from "react-redux";
 
+import {getDataPoint} from "../../redux/actions/dataPoint";
+import {DataPointInfo} from "../../components/DataPoint/dataPointInfo";
 
 export const DataPoint = observer(() => {
+    let { slug } = useParams();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        smartContract.methods.dataPoints(slug).call()
+            .then((dataPoint) => {
+
+                dispatch(getDataPoint(dataPoint.latitude, dataPoint.longitude, dataPoint.timestamp));
+            });
+    }, []);
+
     return(
         <Container>
-            <SimpleGrid minChildWidth="200px" spacing="10px" py="6">
-                <LinkBox as="article" w="200px" p="4" borderWidth="1px" rounded="md" key={'/admin'}>
-                    <LinkOverlay href={'/admin'} target="__blank">
-                        <Text>{'Admin Panel'}</Text>
-                    </LinkOverlay>
-                </LinkBox>
-                <LinkBox as="article" w="200px" p="4" borderWidth="1px" rounded="md" key={'user-panel'}>
-                    <LinkOverlay href={'/user'} target="__blank">
-                        <Text>{'User Panel'}</Text>
-                    </LinkOverlay>
-                </LinkBox>
-            </SimpleGrid>
+            <Heading as={'h1'} size={'xl'} marginBottom={"1rem"}>Datapoint information</Heading>
+            <DataPointInfo/>
         </Container>
     );
 });

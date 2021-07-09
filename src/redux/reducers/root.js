@@ -9,6 +9,7 @@ import { vehicle } from "./vehicle";
 import { device } from "./device";
 import { holder } from "./holder";
 import { partner } from "./partner";
+import { dataPoint } from "./dataPoint";
 
 const rootReducer = combineReducers({
     wallet,
@@ -20,5 +21,6 @@ const rootReducer = combineReducers({
     device,
     holder,
     partner,
+    dataPoint,
 });
 export default rootReducer;
