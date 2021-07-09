@@ -23,63 +23,12 @@ export const driveSlowSafeAbi = [
     {
         "constant": true,
         "inputs": [],
-        "name": "alpha",
-        "outputs": [
-            {
-                "internalType": "uint32",
-                "name": "",
-                "type": "uint32"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [],
         "name": "balance",
         "outputs": [
             {
                 "internalType": "uint256",
                 "name": "",
                 "type": "uint256"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [
-            {
-                "internalType": "bytes32",
-                "name": "",
-                "type": "bytes32"
-            }
-        ],
-        "name": "cars",
-        "outputs": [
-            {
-                "internalType": "bool",
-                "name": "registered",
-                "type": "bool"
-            },
-            {
-                "internalType": "string",
-                "name": "brand",
-                "type": "string"
-            },
-            {
-                "internalType": "string",
-                "name": "model",
-                "type": "string"
-            },
-            {
-                "internalType": "string",
-                "name": "year",
-                "type": "string"
             }
         ],
         "payable": false,
@@ -116,27 +65,6 @@ export const driveSlowSafeAbi = [
                 "internalType": "string",
                 "name": "timestamp",
                 "type": "string"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "name": "deviceIDs",
-        "outputs": [
-            {
-                "internalType": "bytes32",
-                "name": "",
-                "type": "bytes32"
             }
         ],
         "payable": false,
@@ -269,7 +197,7 @@ export const driveSlowSafeAbi = [
             },
             {
                 "internalType": "bytes32",
-                "name": "car",
+                "name": "vehicle",
                 "type": "bytes32"
             },
             {
@@ -286,6 +214,11 @@ export const driveSlowSafeAbi = [
                 "internalType": "uint256",
                 "name": "locked",
                 "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "fundsUsed",
+                "type": "uint256"
             }
         ],
         "payable": false,
@@ -294,13 +227,34 @@ export const driveSlowSafeAbi = [
     },
     {
         "constant": true,
-        "inputs": [],
-        "name": "speed",
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "",
+                "type": "bytes32"
+            }
+        ],
+        "name": "vehicles",
         "outputs": [
             {
-                "internalType": "uint32",
-                "name": "",
-                "type": "uint32"
+                "internalType": "bool",
+                "name": "registered",
+                "type": "bool"
+            },
+            {
+                "internalType": "string",
+                "name": "brand",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "model",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "year",
+                "type": "string"
             }
         ],
         "payable": false,
@@ -500,6 +454,87 @@ export const driveSlowSafeAbi = [
                 "internalType": "bytes32[]",
                 "name": "",
                 "type": "bytes32[]"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "getHoldersIds",
+        "outputs": [
+            {
+                "internalType": "address[]",
+                "name": "",
+                "type": "address[]"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "getVehicleIds",
+        "outputs": [
+            {
+                "internalType": "bytes32[]",
+                "name": "",
+                "type": "bytes32[]"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "getDeviceIds",
+        "outputs": [
+            {
+                "internalType": "address[]",
+                "name": "",
+                "type": "address[]"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "getPolicyIds",
+        "outputs": [
+            {
+                "internalType": "bytes32[]",
+                "name": "",
+                "type": "bytes32[]"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_partnerId",
+                "type": "address"
+            }
+        ],
+        "name": "getPartner",
+        "outputs": [
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
             }
         ],
         "payable": false,

@@ -16,7 +16,7 @@ export const Policy = observer(() => {
         smartContract.methods.policies(slug).call()
             .then((policy) => {
                 dispatch(getPolicy(
-                    policy.isActive, policy.policyHolder, policy.car,
+                    policy.isActive, policy.policyHolder, policy.vehicle,
                     policy.device, policy.premium, policy.locked
                 ));
             });

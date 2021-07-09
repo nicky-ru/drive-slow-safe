@@ -1,32 +1,32 @@
-import { DeviceList } from "../../components/Device/deviceList";
-import { PolicyList } from "../../components/Policy/policyList";
-import { HoldersList } from "../../components/User/holdersList";
-import { VehiclesList } from "../../components/Vehicle/vehiclesList";
+import { Devices } from "../Device/devices";
+import { Policies } from "../Policy/policies";
+import { Holders } from "../User/holders";
+import { Vehicles } from "../Vehicle/vehicles";
 import { DataPointList } from "../../components/DataPoint/dataPointList";
 import { ClaimsList } from "../../components/Claim/claimsList";
-import { PartnersList } from "../../components/Partner/partnersList";
+import { Partners } from "../Partner/partners";
 
 export const ToolConfig = {
     tools: ['devices', 'policies', 'holders', 'vehicles', 'penalties', 'claims', 'partners'],
     devices: {
         name: 'Devices',
         path: '/devices',
-        component: DeviceList,
+        component: Devices,
     },
     policies: {
         name: 'Policies',
         path: '/policies',
-        component: PolicyList,
+        component: Policies,
     },
     holders: {
         name: 'Holders',
         path: '/holders',
-        component: HoldersList,
+        component: Holders,
     },
     vehicles: {
         name: 'Vehicles',
         path: '/vehicles',
-        component: VehiclesList,
+        component: Vehicles,
     },
     penalties: {
         name: 'Penalties',
@@ -41,6 +41,6 @@ export const ToolConfig = {
     partners: {
         name: 'Partners',
         path: '/partners',
-        component: PartnersList,
+        component: Partners,
     },
 }

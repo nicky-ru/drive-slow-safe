@@ -8,6 +8,11 @@ export const wallet = {
 
 export const contract = {
     UPDATE: 'dss/contract/update',
+    SET_POLICIES: 'dss/contract/setPolicies',
+    SET_DEVICES: 'dss/contract/setDevices',
+    SET_HOLDERS: 'dss/contract/setHolders',
+    SET_VEHICLES: 'dss/contract/setVehicles',
+    SET_PARTNERS: 'dss/contract/setPartners',
 }
 
 export const user = {

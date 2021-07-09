@@ -13,7 +13,7 @@ export const Vehicle = observer(() => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        smartContract.methods.cars(slug).call()
+        smartContract.methods.vehicles(slug).call()
             .then((vehicle) => {
                 dispatch(getVehicle(vehicle.brand, vehicle.model, vehicle.year));
             });
