@@ -272,79 +272,23 @@ contract DriveSlowSafe {
         return holders[msg.sender].policies;
     }
 
-    function getHolder(address _holderId) public view returns(bool, uint256, uint256, uint256, uint, bytes32[] memory, bytes32[] memory) {
-        return (
-        holders[_holderId].isActive,
-        holders[_holderId].rating,
-        holders[_holderId].multiplier,
-        holders[_holderId].penaltyMultiplier,
-        holders[_holderId].accumulatedKM,
-        holders[_holderId].penalties,
-        holders[_holderId].policies
-        );
-    }
-
     function getHoldersIds() public view onlyAdministrator returns(address[] memory) {
         return holdersIDs;
-    }
-
-    function getVehicle(bytes32 _vehicleId) public view returns(string memory, string memory, string memory) {
-        return (
-        vehicles[_vehicleId].brand,
-        vehicles[_vehicleId].model,
-        vehicles[_vehicleId].year
-        );
     }
 
     function getVehicleIds() public view onlyAdministrator returns(bytes32[] memory) {
         return vehiclesIds;
     }
 
-    function getDevice(address _deviceId) public view returns(string memory, bool, Status, bytes32) {
-        return (
-        devices[_deviceId].imei,
-        devices[_deviceId].hasOrder,
-        devices[_deviceId].status,
-        devices[_deviceId].policy
-        );
-    }
-
     function getDeviceIds() public view onlyAdministrator returns(address[] memory) {
         return deviceIDs;
-    }
-
-    function getPolicy(bytes32 _policyId) public view returns(bool, address, bytes32, address, uint256, uint256, uint256) {
-        return (
-        policies[_policyId].isActive,
-        policies[_policyId].policyHolder,
-        policies[_policyId].vehicle,
-        policies[_policyId].device,
-        policies[_policyId].premium,
-        policies[_policyId].locked,
-        policies[_policyId].fundsUsed
-        );
     }
 
     function getPolicyIds() public view onlyAdministrator returns(bytes32[] memory) {
         return policyIDs;
     }
 
-    function getDataPoint(bytes32 _dataPointId) public view returns(string memory, string memory, string memory, string memory, string memory, string memory) {
-        return (
-        dataPoints[_dataPointId].accelerometer[0],
-        dataPoints[_dataPointId].accelerometer[1],
-        dataPoints[_dataPointId].accelerometer[2],
-        dataPoints[_dataPointId].latitude,
-        dataPoints[_dataPointId].longitude,
-        dataPoints[_dataPointId].timestamp
-        );
-    }
-
     function getPartner(address _partnerId) public view returns(string memory) {
         return partners[_partnerId].name;
-    }
-
-    function getPartnersIds() public view returns(address[] memory) {
-        return partnersIDs;
     }
 }
