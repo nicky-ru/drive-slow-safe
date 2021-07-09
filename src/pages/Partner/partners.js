@@ -4,18 +4,16 @@ import {Container, Tab, TabList, TabPanel, TabPanels, Tabs} from '@chakra-ui/rea
 import {PartnersList} from "../../components/Partner/partnersList";
 import {useDispatch, useSelector} from "react-redux";
 import smartContract from "../../contract/driveSlowSafe";
-import {setPolicies} from "../../redux/actions/contract";
-import {PolicyListAdmin} from "../../components/Policy/policyListAdmin";
+import {setPartners} from "../../redux/actions/contract";
 
 export const Partners = observer(() => {
     const dispatch = useDispatch();
     const currentAccount = useSelector((state) => state.wallet.address);
-    const admin = useSelector((state) => state.contract.admin);
 
     useEffect(() => {
-        // smartContract.methods.getPolicyIds().call()
-        //     .then((policyIds) => dispatch(setPolicies(policyIds)));
-        //
+        smartContract.methods.getPartnerIds().call()
+            .then((partnersIds) => dispatch(setPartners(partnersIds)));
+
     }, [currentAccount]);
 
     return(

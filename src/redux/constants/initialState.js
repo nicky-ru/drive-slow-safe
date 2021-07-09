@@ -30,7 +30,6 @@ export default {
         fundsUsed: 0,
     },
     penalty: {
-
     },
     vehicle: {
         brand: '',
@@ -38,7 +37,10 @@ export default {
         year: '',
     },
     dataPoint: {
-        speed: 0,
+        accelerometer: [],
+        latitude: '',
+        longitude: '',
+        timestamp: '',
     },
     device: {
         imei: '',
@@ -51,5 +53,8 @@ export default {
         multiplier: 0,
         penaltyMultiplier: 0,
         accumulatedKM: 0,
-    }
+    },
+    partner: {
+        name: '',
+    },
 }

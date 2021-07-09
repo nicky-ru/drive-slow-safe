@@ -17,6 +17,7 @@ import {updateAccount, unlock, lock} from "./redux/actions/wallet";
 import {isAdmin} from "./redux/actions/user";
 import {ToolConfig} from "./pages/Admin/tools";
 import {Holder} from "./pages/Holder";
+import {Partner} from "./pages/Partner";
 
 
 function App() {
@@ -87,10 +88,11 @@ function App() {
             <Route path={'/admin'} exact key={'/admin'} component={Admin}/>
             <Route path={'/user'} exact key={'/user'} component={User}/>
             <Route path={'/holder/:slug'} exact key={'/holder/:slug'} component={Holder}/>
-            <Route path={'/device/:slug'} exact key={'/device/:slug'}><Device/></Route>
-            <Route path={'/policy/:slug'} exact key={'/policy/:slug'}><Policy/></Route>
-            <Route path={'/vehicle/:slug'} exact key={'/vehicle/:slug'}><Vehicle/></Route>
-            <Route path={'/data_point/:slug'} exact key={'/data_point/:slug'}><DataPoint/></Route>
+            <Route path={'/device/:slug'} exact key={'/device/:slug'} component={Device}/>
+            <Route path={'/policy/:slug'} exact key={'/policy/:slug'} component={Policy}/>
+            <Route path={'/vehicle/:slug'} exact key={'/vehicle/:slug'} component={Vehicle}/>
+            <Route path={'/data_point/:slug'} exact key={'/data_point/:slug'} component={DataPoint}/>
+            <Route path={'/partner/:slug'} exact key={'/partner/:slug'} component={Partner}/>
               {ToolConfig.tools.map((i) => (
                   <Route path={ToolConfig[i].path} exact key={ToolConfig[i].path} component={ToolConfig[i].component}/>
               ))}

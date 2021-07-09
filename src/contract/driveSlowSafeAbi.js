@@ -522,19 +522,13 @@ export const driveSlowSafeAbi = [
     },
     {
         "constant": true,
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_partnerId",
-                "type": "address"
-            }
-        ],
-        "name": "getPartner",
+        "inputs": [],
+        "name": "getPartnerIds",
         "outputs": [
             {
-                "internalType": "string",
+                "internalType": "address[]",
                 "name": "",
-                "type": "string"
+                "type": "address[]"
             }
         ],
         "payable": false,

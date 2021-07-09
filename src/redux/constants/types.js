@@ -33,6 +33,11 @@ export const policy = {
 
 export const penalty = {
     ADD: 'dss/penalty/add',
+    GET: 'dss/penalty/get',
+}
+
+export const dataPoint = {
+    GET: 'dss/dataPoint/get',
 }
 
 export const vehicle = {
@@ -41,4 +46,8 @@ export const vehicle = {
 
 export const device = {
     GET: 'dss/device/get',
+}
+
+export const partner = {
+    GET: 'dss/partner/get',
 }

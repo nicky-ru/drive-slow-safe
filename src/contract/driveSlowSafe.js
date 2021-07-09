@@ -1,7 +1,7 @@
 import web3 from "./web3";
 import { driveSlowSafeAbi } from "./driveSlowSafeAbi";
 
-const address = "0x9c64907C190158c9dd1E0937b4Eb4dC3420227E3"  // ganache
+const address = "0x597BFf19A0032E328f95E17135a295693B030998"  // ganache
 
 
 export default new web3.eth.Contract(driveSlowSafeAbi, address);
