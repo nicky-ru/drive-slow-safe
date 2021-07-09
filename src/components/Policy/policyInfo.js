@@ -3,6 +3,7 @@ import {observer} from "mobx-react-lite";
 import {VStack, HStack, Box, Text, Link} from '@chakra-ui/react';
 import {Link as ReachLink, useParams} from 'react-router-dom';
 import {useSelector} from "react-redux";
+import {ClaimModal} from "../Claim/claimModal";
 
 export const PolicyInfo = observer(() => {
     let { slug } = useParams();
@@ -61,8 +62,9 @@ export const PolicyInfo = observer(() => {
             </HStack>
             <HStack>
                 <Box w={"25%"}>Funds used:</Box>
-                <Box>TODO</Box>
+                <Box>{policy.fundsUsed}</Box>
             </HStack>
+            {policy.status && <ClaimModal policyId={slug}/>}
         </VStack>
     );
 })

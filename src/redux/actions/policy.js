@@ -8,7 +8,7 @@ export function addPolicy(policyId, policy) {
     };
 }
 
-export function getPolicy(status, holderId, vehicleId, deviceId, premium, lockedFunds) {
+export function getPolicy(status, holderId, vehicleId, deviceId, premium, lockedFunds, fundsUsed) {
     return {
         type: types.policy.GET,
         status,
@@ -17,5 +17,6 @@ export function getPolicy(status, holderId, vehicleId, deviceId, premium, locked
         deviceId,
         premium,
         lockedFunds,
+        fundsUsed,
     }
 }

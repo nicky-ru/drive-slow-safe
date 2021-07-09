@@ -17,7 +17,7 @@ export const Policy = observer(() => {
             .then((policy) => {
                 dispatch(getPolicy(
                     policy.isActive, policy.policyHolder, policy.vehicle,
-                    policy.device, policy.premium, policy.locked
+                    policy.device, policy.premium, policy.locked, policy.fundsUsed
                 ));
             });
     }, []);

@@ -27,6 +27,7 @@ export default {
         deviceId: '',
         premium: 0,
         lockedFunds: 0,
+        fundsUsed: 0,
     },
     penalty: {
 
