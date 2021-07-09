@@ -3,6 +3,9 @@ pragma solidity ^0.5.13;
 
 /// control speed limit and gps point of speeding
 /// distance for bonus
+// Todo: add safemath
+// Todo: review uint sizes and downgrade where possible
+// Todo: add pagination on getters
 
 contract DriveSlowSafe {
     /// WHO
@@ -72,7 +75,7 @@ contract DriveSlowSafe {
     address payable public administrator;
     address[] private holdersIDs;
     bytes32[] private vehiclesIds;
-    bytes32[] private deviceIDs;
+    address[] private deviceIDs;
     bytes32[] private policyIDs;
     address[] private partnersIDs;
     mapping (address => Holder) private holders;
@@ -108,12 +111,14 @@ contract DriveSlowSafe {
         } else {
             devices[_walletAddress].status = Status.waitingApproval;
         }
+        deviceIDs.push(_walletAddress);  // POSSIBLE BUG may create two id in the array
     }
 
     function registerPartner(address _partner, string memory name) public onlyAdministrator {
         require(!partners[_partner].registered, "This partner has already been registered");
 
         partners[_partner] = Partner(true, name);
+        partnersIDs.push(_partner);
     }
 
     function kill() public onlyAdministrator {
@@ -138,6 +143,7 @@ contract DriveSlowSafe {
         uint256 toLock = holders[msg.sender].multiplier * msg.value;
         require(toLock <= balance, "The contract balance is insuficient to guarantee this policy");
         policies[hash] = Policy(true, msg.sender, _vehicleId, _device, msg.value, toLock, 0);
+        policyIDs.push(hash);
 
         // add premium and supstract locked funds to the contract balance
         balance -= toLock;
@@ -209,6 +215,7 @@ contract DriveSlowSafe {
         holders[_holderAddress].isActive = true;
         holders[_holderAddress].rating = 1;
         holders[_holderAddress].penaltyMultiplier = 1;
+        holdersIDs.push(_holderAddress);
         updateMultiplier(_holderAddress);
     }
 
@@ -237,6 +244,7 @@ contract DriveSlowSafe {
         require(!vehicles[car_hash].registered, "This car has already been registered");
 
         vehicles[car_hash] = Vehicle(true, _brand, _model, _year);
+        vehiclesIds.push(car_hash);
         return car_hash;
     }
 
