@@ -1,5 +1,7 @@
 const Web3 = require("web3");
-const web3 = new Web3(Web3.givenProvider || "ws://localhost:7545");
+// const Big = require('big.js');
+// const web3 = new Web3(Web3.givenProvider || "ws://localhost:7545");
+const web3 = new Web3(new Web3.providers.HttpProvider("https://babel-api.testnet.iotex.io"));
 const driveSlowSafeAbi = [
     {
         "inputs": [],
@@ -533,7 +535,8 @@ const driveSlowSafeAbi = [
         "type": "function"
     }
 ]
-const contract_address = "0xa801e8d1c9D5f7d5fCe1310bFD7d96ad0A6746d8"  // ganache
+// const contract_address = "0xa801e8d1c9D5f7d5fCe1310bFD7d96ad0A6746d8"  // ganache
+const contract_address = "0xac492bFb17C1dfbcDBb2Eab66819d536dD8Ac574"  // ganache
 const smartContract = new web3.eth.Contract(driveSlowSafeAbi, contract_address);
 
 const { CognitoIdentityClient } = require('@aws-sdk/client-cognito-identity');
@@ -560,8 +563,8 @@ const s3 = new S3Client({
 const bucketName = "vactracker";
 
 const time = 30;
-const maxVelocity = 100;  // km per hour
-const checkInterval = 24000;
+const maxVelocity = 80;  // km per hour
+const checkInterval = 5000;
 const datapoints = {};
 const devices = {};
 
@@ -583,27 +586,32 @@ function deg2rad(deg) {
     return deg * (Math.PI/180)
 }
 
+let count = 0;
+
 async function sendDataToContract(objJson) {
     let r = "0x" + objJson.signature.r;
     let s = "0x" + objJson.signature.s;
 
-    let tx_builder = smartContract.methods.receiveMessage(
-        objJson.message.accelerometer[0].toString(),
-        objJson.message.accelerometer[1].toString(),
-        objJson.message.accelerometer[2].toString(),
-        objJson.message.latitude.toString(),
-        objJson.message.longitude.toString(),
-        objJson.message.random,
-        objJson.message.timestamp,
-        r,
-        s
-    )
+    let acc1 = objJson.message.accelerometer[0].toString();
+    let acc2 = objJson.message.accelerometer[1].toString();
+    let acc3 = objJson.message.accelerometer[2].toString();
+
+    let lat = objJson.message.latitude.toPrecision(11).toString();
+    let lon = objJson.message.longitude;
+    if (lon < 10) lon = lon.toPrecision(10).toString();
+    else lon = lon.toPrecision(11).toString();
+    let rand = objJson.message.random;
+    let timestamp = objJson.message.timestamp;
+
+    console.log(acc1, acc2, acc3, lat, lon, rand, timestamp, r, s);
+
+    let tx_builder = smartContract.methods.receiveMessage(acc1, acc2, acc3, lat, lon, rand, timestamp, r, s);
 
     let encoded_tx = tx_builder.encodeABI();
     let transaction_obj = {
-        gas: 1000000,
+        gas: 3000000,
         data: encoded_tx,
-        from: "0xF26a43cb8FF1fa90b603152B845A3E2de9c5Ba6F",
+        from: "0xE9cebA328C78a43A492463f72DE80e4e1a2Df04d",
         to: contract_address
     }
 
@@ -638,12 +646,12 @@ async function handleNewDataPoints() {
             const objJson = await viewObject(datapoint);
             const objJsonPrev = await viewObject(lastObjKey);
 
-            lat1 = objJson.message.latitude;
-            lon1 = objJson.message.longitude;
-
             try {
+                lat1 = objJson.message.latitude;
+                lon1 = objJson.message.longitude;
                 lat2 = objJsonPrev.message.latitude;
                 lon2 = objJsonPrev.message.longitude;
+                console.log(lat1, lon1, lat1, lon2);
 
                 const dist = calcDistance(lat1, lat2, lon1, lon2);
 
@@ -653,6 +661,10 @@ async function handleNewDataPoints() {
                 if (velocity > maxVelocity) {
                     sendDataToContract(objJson);
                 }
+                // if (count === 0) {
+                //     sendDataToContract(objJson);
+                //     count++;
+                // }
 
             } catch (e) {}
         }
