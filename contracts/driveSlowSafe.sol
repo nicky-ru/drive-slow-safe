@@ -185,8 +185,9 @@ contract DriveSlowSafe {
             ));
 
         bytes32 hash = keccak256(bytes(_message));
-        address _deviceId = verifyMessage(hash, _r, _s);
+        require(!(keccak256(abi.encodePacked(dataPoints[hash].random)) == keccak256(abi.encodePacked(''))), "Such datapoint already exists");
 
+        address _deviceId = verifyMessage(hash, _r, _s);
         require(!(_deviceId == address(0)), "This message didn't pass the verification");
         require(devices[_deviceId].hasOrder, "This device has no order yet");
 
