@@ -14,7 +14,7 @@ contract DriveSlowSafe {
         uint256 rating;
         uint256 multiplier;
         uint256 penaltyMultiplier;
-//        uint accumulatedKM;
+        //        uint accumulatedKM;
         bytes32[] penalties;
         bytes32[] policies;
     }
@@ -86,6 +86,7 @@ contract DriveSlowSafe {
     mapping (address => Partner) public partners;
 
     uint32 private alpha = 2;  // to calculate multipliers of users
+    uint32 private theta = 1000; // to calculate penalty multiplier
     uint32 private speed = 50;  // maximal allowed speed
     uint256 public balance;
 
@@ -161,9 +162,9 @@ contract DriveSlowSafe {
         require(partners[_partner].registered, "The given partner address doesn't exist among registered partners");
         require(policies[_policy].policyHolder == msg.sender, "Only owner of the policy can claim the funds");
 
-        uint256 claimable = holders[msg.sender].penaltyMultiplier * policies[_policy].locked;
+        uint256 claimable = holders[msg.sender].penaltyMultiplier * policies[_policy].locked / theta;
         uint256 cleanGrant = holders[msg.sender].multiplier * msg.value;  // the grant without applied penalties
-        uint256 grant = cleanGrant * holders[msg.sender].penaltyMultiplier;
+        uint256 grant = cleanGrant * holders[msg.sender].penaltyMultiplier / theta;
         require(grant <= claimable, "The claimable amount exeeds the limit");
 
         // the funds that the contract should transfer to the partner
@@ -185,7 +186,7 @@ contract DriveSlowSafe {
             ));
 
         bytes32 hash = keccak256(bytes(_message));
-        require(!(keccak256(abi.encodePacked(dataPoints[hash].random)) == keccak256(abi.encodePacked(''))), "Such datapoint already exists");
+        require(keccak256(abi.encodePacked(dataPoints[hash].random)) == keccak256(abi.encodePacked('')), "Such datapoint already exists");
 
         address _deviceId = verifyMessage(hash, _r, _s);
         require(!(_deviceId == address(0)), "This message didn't pass the verification");
@@ -212,7 +213,7 @@ contract DriveSlowSafe {
         devices[device].policy = bytes32(0);
 
         // upgrade user rating for successful policy usage
-        holders[policies[_policy].policyHolder].rating += 1;
+        updateRating(policies[_policy].policyHolder, true);
 
         balance += unlocking;
     }
@@ -222,7 +223,7 @@ contract DriveSlowSafe {
         require(!holders[_holderAddress].isActive, "The account has already been activated");
         holders[_holderAddress].isActive = true;
         holders[_holderAddress].rating = 1;
-        holders[_holderAddress].penaltyMultiplier = 1;
+        holders[_holderAddress].penaltyMultiplier = theta;
         holdersIDs.push(_holderAddress);
         updateMultiplier(_holderAddress);
     }
@@ -269,7 +270,12 @@ contract DriveSlowSafe {
 
     function applyPenalty(address _holder, bytes32 _dataPoint) internal {
         holders[_holder].penalties.push(_dataPoint);
-        updateRating(_holder, false);
+        //        updateRating(_holder, false);
+        uint256 _penaltyMultiplier = holders[_holder].penaltyMultiplier;
+        _penaltyMultiplier -= 1;
+        if (_penaltyMultiplier > 0) {
+            holders[_holder].penaltyMultiplier = _penaltyMultiplier;
+        }
     }
 
     function showMyPenalties() public view returns(bytes32[] memory){
