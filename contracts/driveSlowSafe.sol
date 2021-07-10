@@ -14,7 +14,7 @@ contract DriveSlowSafe {
         uint256 rating;
         uint256 multiplier;
         uint256 penaltyMultiplier;
-        uint accumulatedKM;
+//        uint accumulatedKM;
         bytes32[] penalties;
         bytes32[] policies;
     }
