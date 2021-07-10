@@ -23,26 +23,6 @@ const driveSlowSafeAbi = [
         "type": "function"
     },
     {
-        "constant": false,
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_walletAddress",
-                "type": "address"
-            },
-            {
-                "internalType": "string",
-                "name": "_imei",
-                "type": "string"
-            }
-        ],
-        "name": "approveDevice",
-        "outputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
         "constant": true,
         "inputs": [],
         "name": "balance",
@@ -55,21 +35,6 @@ const driveSlowSafeAbi = [
         ],
         "payable": false,
         "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": false,
-        "inputs": [
-            {
-                "internalType": "bytes32",
-                "name": "_policy",
-                "type": "bytes32"
-            }
-        ],
-        "name": "cancelPolicy",
-        "outputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
         "type": "function"
     },
     {
@@ -146,81 +111,6 @@ const driveSlowSafeAbi = [
     },
     {
         "constant": true,
-        "inputs": [],
-        "name": "getDeviceIds",
-        "outputs": [
-            {
-                "internalType": "address[]",
-                "name": "",
-                "type": "address[]"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [],
-        "name": "getHoldersIds",
-        "outputs": [
-            {
-                "internalType": "address[]",
-                "name": "",
-                "type": "address[]"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [],
-        "name": "getPartnerIds",
-        "outputs": [
-            {
-                "internalType": "address[]",
-                "name": "",
-                "type": "address[]"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [],
-        "name": "getPolicyIds",
-        "outputs": [
-            {
-                "internalType": "bytes32[]",
-                "name": "",
-                "type": "bytes32[]"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [],
-        "name": "getVehicleIds",
-        "outputs": [
-            {
-                "internalType": "bytes32[]",
-                "name": "",
-                "type": "bytes32[]"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": true,
         "inputs": [
             {
                 "internalType": "address",
@@ -249,24 +139,10 @@ const driveSlowSafeAbi = [
                 "internalType": "uint256",
                 "name": "penaltyMultiplier",
                 "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "accumulatedKM",
-                "type": "uint256"
             }
         ],
         "payable": false,
         "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": false,
-        "inputs": [],
-        "name": "kill",
-        "outputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
         "type": "function"
     },
     {
@@ -293,26 +169,6 @@ const driveSlowSafeAbi = [
         ],
         "payable": false,
         "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": false,
-        "inputs": [
-            {
-                "internalType": "address payable",
-                "name": "_partner",
-                "type": "address"
-            },
-            {
-                "internalType": "bytes32",
-                "name": "_policy",
-                "type": "bytes32"
-            }
-        ],
-        "name": "payRepair",
-        "outputs": [],
-        "payable": true,
-        "stateMutability": "payable",
         "type": "function"
     },
     {
@@ -364,6 +220,141 @@ const driveSlowSafeAbi = [
         ],
         "payable": false,
         "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "",
+                "type": "bytes32"
+            }
+        ],
+        "name": "vehicles",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "registered",
+                "type": "bool"
+            },
+            {
+                "internalType": "string",
+                "name": "brand",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "model",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "year",
+                "type": "string"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_walletAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "string",
+                "name": "_imei",
+                "type": "string"
+            }
+        ],
+        "name": "approveDevice",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_partner",
+                "type": "address"
+            },
+            {
+                "internalType": "string",
+                "name": "name",
+                "type": "string"
+            }
+        ],
+        "name": "registerPartner",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [],
+        "name": "kill",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "_brand",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "_model",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "_year",
+                "type": "string"
+            },
+            {
+                "internalType": "address",
+                "name": "_device",
+                "type": "address"
+            }
+        ],
+        "name": "signPolicy",
+        "outputs": [],
+        "payable": true,
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "internalType": "address payable",
+                "name": "_partner",
+                "type": "address"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "_policy",
+                "type": "bytes32"
+            }
+        ],
+        "name": "payRepair",
+        "outputs": [],
+        "payable": true,
+        "stateMutability": "payable",
         "type": "function"
     },
     {
@@ -425,17 +416,12 @@ const driveSlowSafeAbi = [
         "constant": false,
         "inputs": [
             {
-                "internalType": "address",
-                "name": "_partner",
-                "type": "address"
-            },
-            {
-                "internalType": "string",
-                "name": "name",
-                "type": "string"
+                "internalType": "bytes32",
+                "name": "_policy",
+                "type": "bytes32"
             }
         ],
-        "name": "registerPartner",
+        "name": "cancelPolicy",
         "outputs": [],
         "payable": false,
         "stateMutability": "nonpayable",
@@ -472,65 +458,74 @@ const driveSlowSafeAbi = [
         "type": "function"
     },
     {
-        "constant": false,
-        "inputs": [
+        "constant": true,
+        "inputs": [],
+        "name": "getHoldersIds",
+        "outputs": [
             {
-                "internalType": "string",
-                "name": "_brand",
-                "type": "string"
-            },
-            {
-                "internalType": "string",
-                "name": "_model",
-                "type": "string"
-            },
-            {
-                "internalType": "string",
-                "name": "_year",
-                "type": "string"
-            },
-            {
-                "internalType": "address",
-                "name": "_device",
-                "type": "address"
+                "internalType": "address[]",
+                "name": "",
+                "type": "address[]"
             }
         ],
-        "name": "signPolicy",
-        "outputs": [],
-        "payable": true,
-        "stateMutability": "payable",
+        "payable": false,
+        "stateMutability": "view",
         "type": "function"
     },
     {
         "constant": true,
-        "inputs": [
-            {
-                "internalType": "bytes32",
-                "name": "",
-                "type": "bytes32"
-            }
-        ],
-        "name": "vehicles",
+        "inputs": [],
+        "name": "getVehicleIds",
         "outputs": [
             {
-                "internalType": "bool",
-                "name": "registered",
-                "type": "bool"
-            },
+                "internalType": "bytes32[]",
+                "name": "",
+                "type": "bytes32[]"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "getDeviceIds",
+        "outputs": [
             {
-                "internalType": "string",
-                "name": "brand",
-                "type": "string"
-            },
+                "internalType": "address[]",
+                "name": "",
+                "type": "address[]"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "getPolicyIds",
+        "outputs": [
             {
-                "internalType": "string",
-                "name": "model",
-                "type": "string"
-            },
+                "internalType": "bytes32[]",
+                "name": "",
+                "type": "bytes32[]"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "getPartnerIds",
+        "outputs": [
             {
-                "internalType": "string",
-                "name": "year",
-                "type": "string"
+                "internalType": "address[]",
+                "name": "",
+                "type": "address[]"
             }
         ],
         "payable": false,
@@ -538,7 +533,7 @@ const driveSlowSafeAbi = [
         "type": "function"
     }
 ]
-const contract_address = "0x597BFf19A0032E328f95E17135a295693B030998"  // ganache
+const contract_address = "0xa801e8d1c9D5f7d5fCe1310bFD7d96ad0A6746d8"  // ganache
 const smartContract = new web3.eth.Contract(driveSlowSafeAbi, contract_address);
 
 const { CognitoIdentityClient } = require('@aws-sdk/client-cognito-identity');
@@ -564,7 +559,11 @@ const s3 = new S3Client({
 
 const bucketName = "vactracker";
 
+const time = 30;
+const maxVelocity = 100;  // km per hour
+const checkInterval = 24000;
 const datapoints = {};
+const devices = {};
 
 function calcDistance(lat1, lat2, lon1, lon2) {
     let R = 6371; // Radius of the earth in km
@@ -584,54 +583,78 @@ function deg2rad(deg) {
     return deg * (Math.PI/180)
 }
 
-async function sendDataToSC() {
+async function sendDataToContract(objJson) {
+    let r = "0x" + objJson.signature.r;
+    let s = "0x" + objJson.signature.s;
+
+    let tx_builder = smartContract.methods.receiveMessage(
+        objJson.message.accelerometer[0].toString(),
+        objJson.message.accelerometer[1].toString(),
+        objJson.message.accelerometer[2].toString(),
+        objJson.message.latitude.toString(),
+        objJson.message.longitude.toString(),
+        objJson.message.random,
+        objJson.message.timestamp,
+        r,
+        s
+    )
+
+    let encoded_tx = tx_builder.encodeABI();
+    let transaction_obj = {
+        gas: 1000000,
+        data: encoded_tx,
+        from: "0xF26a43cb8FF1fa90b603152B845A3E2de9c5Ba6F",
+        to: contract_address
+    }
+
+    try {
+        await web3.eth.accounts.signTransaction(transaction_obj, privateKey, function (error, signedTransaction) {
+            if (error) {
+                console.log(error);
+            } else {
+                web3.eth.sendSignedTransaction(signedTransaction.rawTransaction)
+                    .on('receipt', function (receipt) {
+                        console.log(receipt);
+                    })
+                    .on("error", function (error) {
+                        console.log(error);
+                    })
+            }
+        });
+    } catch (e) {
+        console.log("error while signing a transaction: ", e);
+    }
+}
+
+async function handleNewDataPoints() {
     for (let datapoint in datapoints) {
         if (!datapoints[datapoint].processed) {
+            const deviceId = datapoint.split("/")[1];
+            const lastObjKey = devices[deviceId];
+
+            devices[deviceId] = datapoint;
             datapoints[datapoint].processed = true;
-            console.log(datapoint, datapoints[datapoint]);
 
             const objJson = await viewObject(datapoint);
+            const objJsonPrev = await viewObject(lastObjKey);
 
-            let r = "0x" + objJson.signature.r;
-            let s = "0x" + objJson.signature.s;
-
-            let tx_builder = smartContract.methods.receiveMessage(
-                objJson.message.accelerometer[0].toString(),
-                objJson.message.accelerometer[1].toString(),
-                objJson.message.accelerometer[2].toString(),
-                objJson.message.latitude.toString(),
-                objJson.message.longitude.toString(),
-                objJson.message.random,
-                objJson.message.timestamp,
-                r,
-                s
-            )
-
-            let encoded_tx = tx_builder.encodeABI();
-            let transaction_obj = {
-                gas: 1000000,
-                data: encoded_tx,
-                from: "0xF26a43cb8FF1fa90b603152B845A3E2de9c5Ba6F",
-                to: contract_address
-            }
+            lat1 = objJson.message.latitude;
+            lon1 = objJson.message.longitude;
 
             try {
-                await web3.eth.accounts.signTransaction(transaction_obj, privateKey, function (error, signedTransaction) {
-                    if (error) {
-                        console.log(error);
-                    } else {
-                        web3.eth.sendSignedTransaction(signedTransaction.rawTransaction)
-                            .on('receipt', function (receipt) {
-                                console.log(receipt);
-                            })
-                            .on("error", function (error) {
-                                console.log(error);
-                            })
-                    }
-                });
-            } catch (e) {
-                console.log("error while sending a transaction: ", e);
-            }
+                lat2 = objJsonPrev.message.latitude;
+                lon2 = objJsonPrev.message.longitude;
+
+                const dist = calcDistance(lat1, lat2, lon1, lon2);
+
+                const velocity = dist * time;  // km per hour
+                console.log("Distance: ", dist, "Velocity: ", velocity);
+
+                if (velocity > maxVelocity) {
+                    sendDataToContract(objJson);
+                }
+
+            } catch (e) {}
         }
     }
 }
@@ -642,6 +665,10 @@ async function listDevices() {
             new ListObjectsCommand({Prefix: "device/", Delimiter: "/", Bucket: bucketName})
         );
         await data.CommonPrefixes.map(async function (object) {
+            const deviceId = object.Prefix.split("/")[1];
+            if (!devices[deviceId]) {
+                devices[deviceId] = "";
+            }
             let prefix = object.Prefix + 'data/';
             const _obj =  await s3.send(
                 new ListObjectsCommand({Prefix: prefix, Delimiter: "/", Bucket: bucketName})
@@ -678,8 +705,13 @@ function showDP() {
     console.log("___BREAK___");
 }
 
+function showDevices() {
+    console.log(devices);
+}
+
 (async() => {
-    setInterval(listDevices, 10000);
-    setInterval(sendDataToSC, 15000);
+    setInterval(listDevices, checkInterval);
+    setInterval(handleNewDataPoints, checkInterval);
+    // setInterval(showDevices, 5000);
     // setInterval(showDP, 5000);
 })();
