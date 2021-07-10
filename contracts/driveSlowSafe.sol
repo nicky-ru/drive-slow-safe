@@ -200,14 +200,21 @@ contract DriveSlowSafe {
     function cancelPolicy(bytes32 _policy) public {
         // Todo: set policy deactivation
         // require time.now > policy.endDate
+
+        // handle policy deactivation and funds unlock to smartContract
         uint256 unlocking = policies[_policy].locked;
         policies[_policy].locked = 0;
         policies[_policy].isActive = false;
+
+        // unlink device
         address device = policies[_policy].device;
         devices[device].hasOrder = false;
         devices[device].policy = bytes32(0);
-        balance += unlocking;
 
+        // upgrade user rating for successful policy usage
+        holders[policies[_policy].policyHolder].rating += 1;
+
+        balance += unlocking;
     }
 
     /// utility functions
