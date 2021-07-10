@@ -85,7 +85,7 @@ contract DriveSlowSafe {
     mapping (bytes32 => DataPoint) public dataPoints;
     mapping (address => Partner) public partners;
 
-    uint32 private alpha = 10;  // to calculate multipliers of users
+    uint32 private alpha = 2;  // to calculate multipliers of users
     uint32 private speed = 50;  // maximal allowed speed
     uint256 public balance;
 
