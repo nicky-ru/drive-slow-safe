@@ -13,13 +13,18 @@ export const Policy = observer(() => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        smartContract.methods.policies(slug).call()
-            .then((policy) => {
-                dispatch(getPolicy(
-                    policy.isActive, policy.policyHolder, policy.vehicle,
-                    policy.device, policy.premium, policy.locked, policy.fundsUsed
-                ));
-            });
+        try {
+            smartContract.methods.policies(slug).call()
+                .then((policy) => {
+                    dispatch(getPolicy(
+                        policy.isActive, policy.policyHolder, policy.vehicle,
+                        policy.device, policy.premium, policy.locked, policy.fundsUsed
+                    ));
+                });
+        } catch (e) {
+            // handle error
+        }
+
     }, []);
 
     return(

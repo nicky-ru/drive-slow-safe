@@ -13,10 +13,15 @@ export const Holder = observer(() => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        smartContract.methods.holders(slug).call()
-            .then((holder) => {
-                dispatch(getHolder(holder.rating, holder.multiplier, holder.penaltyMultiplier, holder.accumulatedKM));
-            });
+        try {
+            smartContract.methods.holders(slug).call()
+                .then((holder) => {
+                    dispatch(getHolder(holder.rating, holder.multiplier, holder.penaltyMultiplier, holder.accumulatedKM));
+                });
+        } catch (e) {
+            // handle error
+        }
+
     }, []);
 
     return(

@@ -13,11 +13,16 @@ export const DataPoint = observer(() => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        smartContract.methods.dataPoints(slug).call()
-            .then((dataPoint) => {
+        try {
+            smartContract.methods.dataPoints(slug).call()
+                .then((dataPoint) => {
 
-                dispatch(getDataPoint(dataPoint.latitude, dataPoint.longitude, dataPoint.timestamp));
-            });
+                    dispatch(getDataPoint(dataPoint.latitude, dataPoint.longitude, dataPoint.timestamp));
+                });
+        } catch (e) {
+            // handle error
+        }
+
     }, []);
 
     return(

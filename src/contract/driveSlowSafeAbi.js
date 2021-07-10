@@ -137,11 +137,6 @@ export const driveSlowSafeAbi = [
                 "internalType": "uint256",
                 "name": "penaltyMultiplier",
                 "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "accumulatedKM",
-                "type": "uint256"
             }
         ],
         "payable": false,

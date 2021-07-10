@@ -14,8 +14,13 @@ export const Policies = observer(() => {
 
     useEffect(() => {
         if (currentAccount.toUpperCase() === admin.toUpperCase()) {
-            smartContract.methods.getPolicyIds().call()
-                .then((policyIds) => dispatch(setPolicies(policyIds)));
+            try {
+                smartContract.methods.getPolicyIds().call({from: admin})
+                    .then((policyIds) => dispatch(setPolicies(policyIds)));
+            } catch (e) {
+                // handle error
+            }
+
         }
     }, [currentAccount]);
 

@@ -13,8 +13,13 @@ export const Holders = observer(() => {
 
     useEffect(() => {
         if (currentAccount.toUpperCase() === admin.toUpperCase()) {
-            smartContract.methods.getHoldersIds().call()
-                .then((holdersIds) => dispatch(setHolders(holdersIds)));
+            try {
+                smartContract.methods.getHoldersIds().call({from: admin})
+                    .then((holdersIds) => dispatch(setHolders(holdersIds)));
+            } catch (e) {
+                // handle error
+            }
+
         }
     }, [currentAccount]);
 

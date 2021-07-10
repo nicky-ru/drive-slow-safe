@@ -6,8 +6,8 @@ export default {
         address: ''
     },
     contract: {
-        address: '0x311388275Ffe79Fd576b93f5431397A838604F5D',
-        admin: '0xF26a43cb8FF1fa90b603152B845A3E2de9c5Ba6F',
+        address: '0xac492bFb17C1dfbcDBb2Eab66819d536dD8Ac574',
+        admin: '0xE9cebA328C78a43A492463f72DE80e4e1a2Df04d',
         balance: 0,
         policies: [],
         devices: [],

@@ -14,14 +14,18 @@ export const User = observer(() => {
 
     useEffect(() => {
         if (currentAccount !== '') {
-            smartContract.methods.showMyPolicies().call({from:currentAccount})
-                .then((policies) => {
-                    dispatch(setPolicies(policies));
-                })
-            smartContract.methods.showMyPenalties().call({from:currentAccount})
-                .then((penalties) => {
-                    dispatch(setPenalties(penalties));
-                })
+            try {
+                smartContract.methods.showMyPolicies().call({from:currentAccount})
+                    .then((policies) => {
+                        dispatch(setPolicies(policies));
+                    })
+                smartContract.methods.showMyPenalties().call({from:currentAccount})
+                    .then((penalties) => {
+                        dispatch(setPenalties(penalties));
+                    })
+            } catch (e) {
+                // handle error
+            }
         }
     }, [currentAccount]);
 

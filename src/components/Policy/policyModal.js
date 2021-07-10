@@ -27,8 +27,13 @@ export const PolicyModal = observer(() => {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        smartContract.methods.signPolicy(vehicleBrand, vehicleModel, vehicleYear, deviceAddress)
-            .send({from: currentAccount, gas: 1000000, value:premium});
+        try {
+            smartContract.methods.signPolicy(vehicleBrand, vehicleModel, vehicleYear, deviceAddress)
+                .send({from: currentAccount, gas: 1000000, value:premium});
+        } catch (e) {
+            // hanlde error
+        }
+
     }
 
     return(

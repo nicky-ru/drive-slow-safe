@@ -13,10 +13,15 @@ export const Vehicle = observer(() => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        smartContract.methods.vehicles(slug).call()
-            .then((vehicle) => {
-                dispatch(getVehicle(vehicle.brand, vehicle.model, vehicle.year));
-            });
+        try {
+            smartContract.methods.vehicles(slug).call()
+                .then((vehicle) => {
+                    dispatch(getVehicle(vehicle.brand, vehicle.model, vehicle.year));
+                });
+        } catch (e) {
+            // handle error
+        }
+
     }, []);
 
     return(

@@ -14,8 +14,10 @@ export const Devices = observer(() => {
 
     useEffect(() => {
         if (currentAccount.toUpperCase() === admin.toUpperCase()) {
-            smartContract.methods.getDeviceIds().call()
-                .then((deviceIds) => dispatch(setDevices(deviceIds)));
+            try {
+                smartContract.methods.getDeviceIds().call({from: admin})
+                    .then((deviceIds) => dispatch(setDevices(deviceIds)));
+            } catch (e) {}
         }
     }, [currentAccount]);
 

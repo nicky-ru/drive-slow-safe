@@ -11,8 +11,13 @@ export const Partners = observer(() => {
     const currentAccount = useSelector((state) => state.wallet.address);
 
     useEffect(() => {
-        smartContract.methods.getPartnerIds().call()
-            .then((partnersIds) => dispatch(setPartners(partnersIds)));
+        try {
+            smartContract.methods.getPartnerIds().call()
+                .then((partnersIds) => dispatch(setPartners(partnersIds)));
+        } catch (e) {
+            // handle error
+        }
+
 
     }, [currentAccount]);
 

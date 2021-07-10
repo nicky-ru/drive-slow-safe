@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import {useDispatch, useSelector} from "react-redux";
 
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, Button, Container, Center } from "@chakra-ui/react";
+import { Box, Text } from '@chakra-ui/layout';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import {theme} from "./lib/theme";
 import {Header} from './components/Header/index'
@@ -13,12 +14,26 @@ import {Vehicle} from "./pages/Vehicle";
 import {Device} from "./pages/Device";
 import {DataPoint} from "./pages/DataPoint";
 
+import { ErrorBoundary } from 'react-error-boundary';
 import {updateAccount, unlock, lock} from "./redux/actions/wallet";
 import {isAdmin} from "./redux/actions/user";
 import {ToolConfig} from "./pages/Admin/tools";
 import {Holder} from "./pages/Holder";
 import {Partner} from "./pages/Partner";
 
+const ErrorFallback = ({ error, resetErrorBoundary }) => {
+    return (
+        <Container role="alert">
+            <Center h="500px">
+                <Box>
+                    <p>Something went wrong:</p>
+                    <Text color="red.500">{error.message}</Text>
+                    <Button onClick={resetErrorBoundary}>Try again</Button>
+                </Box>
+            </Center>
+        </Container>
+    );
+};
 
 function App() {
   // define App state helpers
@@ -76,28 +91,30 @@ function App() {
 
   return (
       <ChakraProvider theme={theme}>
-        <Router>
-          <Header/>
-          <Switch>
-            <Route path={'/'} exact key={'/'}>
-              {isLocked ?
-                  <Start handleConnect={handleConnect}/> :
-                  <Redirect to={'/user'}/>
-              }
-            </Route>
-            <Route path={'/admin'} exact key={'/admin'} component={Admin}/>
-            <Route path={'/user'} exact key={'/user'} component={User}/>
-            <Route path={'/holder/:slug'} exact key={'/holder/:slug'} component={Holder}/>
-            <Route path={'/device/:slug'} exact key={'/device/:slug'} component={Device}/>
-            <Route path={'/policy/:slug'} exact key={'/policy/:slug'} component={Policy}/>
-            <Route path={'/vehicle/:slug'} exact key={'/vehicle/:slug'} component={Vehicle}/>
-            <Route path={'/data_point/:slug'} exact key={'/data_point/:slug'} component={DataPoint}/>
-            <Route path={'/partner/:slug'} exact key={'/partner/:slug'} component={Partner}/>
-              {ToolConfig.tools.map((i) => (
-                  <Route path={ToolConfig[i].path} exact key={ToolConfig[i].path} component={ToolConfig[i].component}/>
-              ))}
-          </Switch>
-        </Router>
+          <ErrorBoundary FallbackComponent={ErrorFallback}>
+              <Router>
+                  <Header/>
+                  <Switch>
+                      <Route path={'/'} exact key={'/'}>
+                          {isLocked ?
+                              <Start handleConnect={handleConnect}/> :
+                              <Redirect to={'/user'}/>
+                          }
+                      </Route>
+                      <Route path={'/admin'} exact key={'/admin'} component={Admin}/>
+                      <Route path={'/user'} exact key={'/user'} component={User}/>
+                      <Route path={'/holder/:slug'} exact key={'/holder/:slug'} component={Holder}/>
+                      <Route path={'/device/:slug'} exact key={'/device/:slug'} component={Device}/>
+                      <Route path={'/policy/:slug'} exact key={'/policy/:slug'} component={Policy}/>
+                      <Route path={'/vehicle/:slug'} exact key={'/vehicle/:slug'} component={Vehicle}/>
+                      <Route path={'/data_point/:slug'} exact key={'/data_point/:slug'} component={DataPoint}/>
+                      <Route path={'/partner/:slug'} exact key={'/partner/:slug'} component={Partner}/>
+                      {ToolConfig.tools.map((i) => (
+                          <Route path={ToolConfig[i].path} exact key={ToolConfig[i].path} component={ToolConfig[i].component}/>
+                      ))}
+                  </Switch>
+              </Router>
+          </ErrorBoundary>
       </ChakraProvider>
   );
 }

@@ -25,8 +25,13 @@ export const ClaimModal = observer((props) => {
 
         let userPays = claim * 0.1;
 
-        smartContract.methods.payRepair(partnerAddress, props.policyId)
-            .send({from: currentAccount, gas: 1000000, value: userPays});
+        try {
+            smartContract.methods.payRepair(partnerAddress, props.policyId)
+                .send({from: currentAccount, gas: 1000000, value: userPays});
+        } catch (e) {
+            // handle error
+        }
+
     }
 
     return(

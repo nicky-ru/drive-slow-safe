@@ -24,7 +24,11 @@ export const DeviceModal = observer(() => {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        smartContract.methods.approveDevice(deviceAddress, deviceImei).send({from: currentAccount, gas: 1000000});
+        try {
+            smartContract.methods.approveDevice(deviceAddress, deviceImei).send({from: currentAccount, gas: 1000000});
+        } catch (e) {
+            // handle error
+        }
     }
 
     return(

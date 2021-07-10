@@ -13,10 +13,15 @@ export const Device = observer(() => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        smartContract.methods.devices(slug).call()
-            .then((device) => {
-                dispatch(getDevice(device.imei, device.hasOrder, device.status, device.policy));
-            });
+        try {
+            smartContract.methods.devices(slug).call()
+                .then((device) => {
+                    dispatch(getDevice(device.imei, device.hasOrder, device.status, device.policy));
+                });
+        } catch (e) {
+            // handle error
+        }
+
     }, []);
 
     return(

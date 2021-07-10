@@ -13,10 +13,15 @@ export const Partner = observer(() => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        smartContract.methods.partners(slug).call()
-            .then((partner) => {
-                dispatch(getPartner(partner.name));
-            });
+        try {
+            smartContract.methods.partners(slug).call()
+                .then((partner) => {
+                    dispatch(getPartner(partner.name));
+                });
+        } catch (e) {
+            // handle errror
+        }
+
     }, []);
 
     return(

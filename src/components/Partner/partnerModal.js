@@ -24,7 +24,11 @@ export const PartnerModal = observer(() => {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        smartContract.methods.registerPartner(partnerAddress, partnerName).send({from: currentAccount, gas: 1000000});
+        try {
+            smartContract.methods.registerPartner(partnerAddress, partnerName).send({from: currentAccount, gas: 1000000});
+        } catch (e) {
+            // handle error
+        }
     }
 
     return(

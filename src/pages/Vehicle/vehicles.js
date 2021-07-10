@@ -13,8 +13,13 @@ export const Vehicles = observer(() => {
 
     useEffect(() => {
         if (currentAccount.toUpperCase() === admin.toUpperCase()) {
-            smartContract.methods.getVehicleIds().call()
-                .then((vehicleIds) => dispatch(setVehicles(vehicleIds)));
+            try {
+                smartContract.methods.getVehicleIds().call({from: admin})
+                    .then((vehicleIds) => dispatch(setVehicles(vehicleIds)));
+            } catch (e) {
+                // handle error
+            }
+
         }
     }, [currentAccount]);
 
