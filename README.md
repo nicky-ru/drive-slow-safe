@@ -1,4 +1,4 @@
-#DriveSlowSafe SmartContract
+#DriveSlowSafe
 ## Description
 
 An insurance company gets and registers Pebble Devices. It also deploys the smart contract and registers
