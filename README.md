@@ -31,6 +31,15 @@ This repo contains three branches:
 2) drive-slow-safe-sc (Smart Contracts)
 3) drive-slow-safe-server (Server side)
 
+## Installation
+
+Use the git to install the project.
+
+```
+git clone --single-branch --branch drive-slow-safe-react https://github.com/nicky-ru/drive-slow-safe.git ./drive-slow-safe-react
+```
+
+
 ## Getting started with the DriveSlowSafe dapp
 ### Step 1
 Configure and deploy Smart Contract.
