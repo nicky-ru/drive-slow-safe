@@ -22,6 +22,9 @@ can choose one of the approved Partners.
 When the User had no accidents and did't claim the funds, the Policy will be deactivated after certain
 period of time and the remaining locked funds will be unlocked back to the Smart Contract.
 
+## Demo
+[Here is a link to a demo published on YouTube](https://youtu.be/sXz3-jyW21Q)
+
 ## Project structure
 This repo contains three branches: 
 1) drive-slow-safe-react (WebUI)
