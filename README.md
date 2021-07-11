@@ -31,6 +31,14 @@ This repo contains three branches:
 1) drive-slow-safe-react (WebUI)
 2) drive-slow-safe-sc (Smart Contracts)
 3) drive-slow-safe-server (Server side)
+
+## Installation
+
+Use the git to install the project.
+
+```
+git clone --single-branch --branch drive-slow-safe-sc https://github.com/nicky-ru/drive-slow-safe.git ./drive-slow-safe-sc
+```
 ## Getting Started with the project
 
 This is the branch used for storing the Smart Contracts of the project.
