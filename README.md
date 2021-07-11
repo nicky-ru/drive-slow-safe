@@ -1,8 +1,9 @@
-#DriveSlowSafe SmartContract
+#DriveSlowSafe
+Welcome!
 ## Description
 
 An insurance company gets and registers Pebble Devices. It also deploys the smart contract and registers
-partners (local car repair shops);
+partners (local car repair shops).
 
 Each user gets a device and installs it into his car. He needs to sign a policy on Dapp Website.
 After signing a policy the Pebble device is being activated and starts to track the speed of the
@@ -49,12 +50,14 @@ Server:
 git clone --single-branch --branch drive-slow-safe-server https://github.com/nicky-ru/drive-slow-safe.git ./drive-slow-safe-server
 ```
 ## Getting Started with the project
+The project setup consists of the following three steps:
+1) Smart Contract setup and deployment
+2) WebUI setup and build
+3) Server start
+4) Device registration
 
-This is the branch used for storing the Smart Contracts of the project.
-
-To see the WebUI go to: drive-slow-safe-react \
-To see the Server part go to: drive-slow-safe-server
-
+## Step 1: Smart Contract setup
+Here are the steps for configure and deploy the smart contract.
 ### Step 1.1: Secret key
 In the `./truffle-config.js` file set a path to admin private key.
 
@@ -88,10 +91,24 @@ A new user without penalties with Alpha = 2, PM = 1000 and premium set to 100 00
 200 000 IOTX.
 If user has got one penalty, i.e PM = 999, the calimable amount with the same Alpha and PM variables will be 199 800 IOTX.
 
+### Step 1.4: Deploy
+In the command line run the code:
+```bash
+truffle migrate --reset --network dev
+```
+If the transaction was successful, note the address of the deployed DriveSlowSafe contract and ABI of the contract.
+You can find ABI here `./build/contracts/DriveSlowSafe.json`. In the next steps we will use the contract address and the ABI.
+
+## Step 2: WebUI setup
+Todo
+## Step 3: Server setup
+Todo
+## Step 4: Device registration
+Todo
 ## Usage
-
+Todo
 ## Roadmap
-
+Todo
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
