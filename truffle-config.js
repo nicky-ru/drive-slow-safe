@@ -19,12 +19,12 @@
  */
 
 const HDWalletProvider = require('@truffle/hdwallet-provider');
-// const infuraKey = "fj4jll3k.....";
-//
+
+/************************************************/
+/*     Step 1: add path to the private key      */
+/************************************************/
 const fs = require('fs');
 const privateKey = fs.readFileSync("./.secret").toString().trim();
-// const mnemonic = fs.readFileSync(".secret").toString().trim();
-
 module.exports = {
   /**
    * Networks define how you connect to your ethereum client and let you set the
