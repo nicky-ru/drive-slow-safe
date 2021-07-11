@@ -1,11 +1,5 @@
-# DriveSlowSafe
-
-This repo contains three branches: 
-1) drive-slow-safe-react (WebUI)
-2) drive-slow-safe-sc (Smart Contracts)
-3) drive-slow-safe-server (Server side)
-
-## About the project
+# DriveSlowSafe WebUI
+## Description
 
 An insurance company gets and registers Pebble Devices. It also deploys the smart contract and registers
 partners (local car repair shops);
@@ -27,3 +21,16 @@ can choose one of the approved Partners.
 
 When the User had no accidents and did't claim the funds, the Policy will be deactivated after certain
 period of time and the remaining locked funds will be unlocked back to the Smart Contract.
+
+## Project structure
+This repo contains three branches: 
+1) drive-slow-safe-react (WebUI)
+2) drive-slow-safe-sc (Smart Contracts)
+3) drive-slow-safe-server (Server side)
+
+## Getting started with the DriveSlowSafe dapp
+### Step 1
+Configure and deploy Smart Contract.
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
