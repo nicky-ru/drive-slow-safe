@@ -86,7 +86,7 @@ contract DriveSlowSafe {
     mapping (address => Partner) public partners;
 
     /************************************************/
-    /*           Step 3: set multipliers            */
+    /*           Step 1.3: set multipliers          */
     /************************************************/
     uint32 private alpha = 2;  // to calculate multipliers of users
     uint32 private theta = 1000; // to calculate penalty multiplier
