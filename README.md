@@ -117,10 +117,22 @@ In `drive-slow-safe-server/main.js` set the required parameters for speed, time 
 ### Step 3.6: Run server
 In command line run
 `npm main.js`
-## Step 4: Device registration
-Todo
 ## Usage
-Todo
+Usage of the dapp for admin and user
+### Admin
+- Register new Pebble Devices in AWS IoT to get certificate, private and public key
+- Register a new Pebble Device from admin pannel and send the registered device to a new User.
+- Register new partners (trusted car repair shops) from admin panel
+- (In future version) Add funds to the contract
+### User
+- Install the received Pebble Tracker into the vehicle
+- Sign a policy with the vehicle and device information + pay the Premium
+- In case of an accident choose a Car repair shop among **Partners** and claim funds
+#### Notes: 
+1) The user needs to pay 10% of the claimed funds and not more than there is locked in the Policy.
+2) Claimable funds don't sum up from multiple policies. Claimable amount is based on each Policy independently.
+3) One user can sign multiple Policies. One Policy - One device (i.e one Vehicle)
+4) Claimable funds cannot be withdrawn to the User's address, but only spent in form of paying for repair service to a chosen **Partner**
 ## Roadmap
 Todo
 ## Contributing
