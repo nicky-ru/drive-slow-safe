@@ -1,5 +1,21 @@
 # DriveSlowSafe
 Welcome!
+## Contents:
+- [Description](https://github.com/nicky-ru/drive-slow-safe#description)
+- [Demo](https://github.com/nicky-ru/drive-slow-safe#demo)
+- [Project Structure](https://github.com/nicky-ru/drive-slow-safe#project-structure)
+- [Prerequisites](https://github.com/nicky-ru/drive-slow-safe#prerequisites)
+- [Getting Started](https://github.com/nicky-ru/drive-slow-safe#getting-started-with-the-project)
+    - [Installation](https://github.com/nicky-ru/drive-slow-safe#installation)
+    - [Step 1](https://github.com/nicky-ru/drive-slow-safe#step-1-smart-contract-setup)
+    - [Step 2](https://github.com/nicky-ru/drive-slow-safe#step-2-webui-setup)
+    - [Step 3](https://github.com/nicky-ru/drive-slow-safe#step-3-server-setup)
+    
+- [Usage](https://github.com/nicky-ru/drive-slow-safe#usage)
+- [Roadmap](https://github.com/nicky-ru/drive-slow-safe#roadmap)
+- [Contributing](https://github.com/nicky-ru/drive-slow-safe#contributing)
+- [License](https://github.com/nicky-ru/drive-slow-safe#license)
+
 ## Description
 An insurance company gets and registers Pebble Devices. It also deploys the smart contract and registers
 partners (local car repair shops).
@@ -32,6 +48,11 @@ This repo contains three branches:
 ## Prerequisites
 - IoT backend ready for receiving and storing messages from Pebble Tracker (AWS IoT + AWS S3);
 - [Metamask](https://metamask.io/) plugin installed;
+## Getting Started with the project
+The project setup consists of the following three steps:
+1) Smart Contract setup and deployment
+2) WebUI setup and build
+3) Server start
 ## Installation
 Use the git to install the project.
 - SmartContract:
@@ -46,12 +67,6 @@ git clone --single-branch --branch drive-slow-safe-react https://github.com/nick
 ```
 git clone --single-branch --branch drive-slow-safe-server https://github.com/nicky-ru/drive-slow-safe.git ./drive-slow-safe-server
 ```
-## Getting Started with the project
-The project setup consists of the following three steps:
-1) Smart Contract setup and deployment
-2) WebUI setup and build
-3) Server start
-4) Device registration
 ## Step 1: Smart Contract setup
 Here are the steps for configure and deploy the smart contract.
 ### Step 1.1: Secret key
