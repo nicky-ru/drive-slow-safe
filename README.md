@@ -1,7 +1,6 @@
 # DriveSlowSafe
 Welcome!
 ## Description
-
 An insurance company gets and registers Pebble Devices. It also deploys the smart contract and registers
 partners (local car repair shops).
 
@@ -23,29 +22,24 @@ can choose one of the approved Partners.
 When the User had no accidents and did't claim the funds, the Policy will be deactivated after certain
 period of time and the remaining locked funds will be unlocked back to the Smart Contract.
 This is the branch used for storing the Server side of the project.
-
 ## Demo
 [Here is a link to a demo published on YouTube](https://youtu.be/sXz3-jyW21Q)
-
 ## Project structure
 This repo contains three branches:
 1) drive-slow-safe-react (WebUI)
 2) drive-slow-safe-sc (Smart Contracts)
 3) drive-slow-safe-server (Server side)
-
 ## Installation
-
 Use the git to install the project.
-
-SmartContract:
+- SmartContract:
 ```
 git clone --single-branch --branch drive-slow-safe-sc https://github.com/nicky-ru/drive-slow-safe.git ./drive-slow-safe-sc
 ```
-WebUI:
+- WebUI:
 ```
 git clone --single-branch --branch drive-slow-safe-react https://github.com/nicky-ru/drive-slow-safe.git ./drive-slow-safe-react
 ```
-Server:
+- Server:
 ```
 git clone --single-branch --branch drive-slow-safe-server https://github.com/nicky-ru/drive-slow-safe.git ./drive-slow-safe-server
 ```
@@ -55,27 +49,22 @@ The project setup consists of the following three steps:
 2) WebUI setup and build
 3) Server start
 4) Device registration
-
 ## Step 1: Smart Contract setup
 Here are the steps for configure and deploy the smart contract.
 ### Step 1.1: Secret key
-In the `./truffle-config.js` file set a path to admin private key.
-
+In the `drive-slow-safe-sc/truffle-config.js` file set a path to admin private key.
 ### Step 1.2: Admin and Funds
-In the `./migrations/2_contract_migration.js` file set the admin address and a reasonable amount of funds to lock.
-
+In the `drive-slow-safe-sc/migrations/2_contract_migration.js` file set the admin address and a reasonable amount of funds to lock.
 ```javascript
 deployer.deploy(DriveSlowSafe, {
         from: "ADMIN_ADDRESS",
         value: VALUE_TO_LOCK
     });
 ```
-
 Pay attention, that if the amount of locked funds will be not enough to guarantee Policies, users won't be able to 
 sign policies.
-
 ### Step 1.3: Multipliers
-In the `./contracts/driveSlowSafe.sol` change the multipliers values according to your requirements.\
+In the `drive-slow-safe-sc/contracts/driveSlowSafe.sol` change the multipliers values according to your requirements.\
 By default the values are as follows:
 ```solidity
     uint32 private alpha = 2;  // to calculate multipliers of users
@@ -90,17 +79,26 @@ a Policy Holder could claim:\
 A new user without penalties with Alpha = 2, PM = 1000 and premium set to 100 000 IOTX could claim
 200 000 IOTX.
 If user has got one penalty, i.e PM = 999, the calimable amount with the same Alpha and PM variables will be 199 800 IOTX.
-
 ### Step 1.4: Deploy
 In the command line run the code:
 ```bash
 truffle migrate --reset --network dev
 ```
 If the transaction was successful, note the address of the deployed DriveSlowSafe contract and ABI of the contract.
-You can find ABI here `./build/contracts/DriveSlowSafe.json`. In the next steps we will use the contract address and the ABI.
-
+You can find ABI here `drive-slow-safe-sc/build/contracts/DriveSlowSafe.json`. In the next steps we will use the contract address and the ABI.
 ## Step 2: WebUI setup
-Todo
+Here are the steps to prepare and build the WebUI.
+### Step 2.1: Contract address
+In `drive-slow-safe-react/src/contract/driveSlowSafe.js` set the contract address to the one from step 1.4.
+### Step 2.2: Contract Abi
+In `drive-slow-safe-react/src/contract/driveSlowSafeAbi.js` set the contract Abi to the one from step 1.4.
+### Step 2.3: Contract Admin
+In `drive-slow-safe-react/src/redux/constants/initialState.js` set the contract address and admin.
+### Step 2.4: Build
+In command line run
+```bash
+yarn build
+```
 ## Step 3: Server setup
 Todo
 ## Step 4: Device registration
