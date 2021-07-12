@@ -29,6 +29,9 @@ This repo contains three branches:
 1) drive-slow-safe-react (WebUI)
 2) drive-slow-safe-sc (Smart Contracts)
 3) drive-slow-safe-server (Server side)
+## Prerequisites
+- IoT backend ready for receiving and storing messages from Pebble Tracker (AWS IoT + AWS S3);
+- [Metamask](https://metamask.io/) plugin installed;
 ## Installation
 Use the git to install the project.
 - SmartContract:
@@ -100,7 +103,20 @@ In command line run
 yarn build
 ```
 ## Step 3: Server setup
-Todo
+Here are the steps to prepare and run the server for handling messages from Pebble Tracker.
+### Step 3.1: Contract address
+In `drive-slow-safe-server/main.js` set the contract address and admin to the ones from step 1.4.
+### Step 3.2: Contract Abi
+In `drive-slow-safe-server/main.js` set the contract Abi to the one from step 1.4.
+### Step 3.3: Private key
+In `drive-slow-safe-server/main.js` set the path to the private key of the admin to sign transactions.
+### Step 3.4: AWS
+In `drive-slow-safe-server/main.js` set the AWS Backend params: Region, Bucket name and Identity pool
+### Step 3.5: Params
+In `drive-slow-safe-server/main.js` set the required parameters for speed, time and interval.
+### Step 3.6: Run server
+In command line run
+`npm main.js`
 ## Step 4: Device registration
 Todo
 ## Usage
