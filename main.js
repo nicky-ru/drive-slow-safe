@@ -1,7 +1,13 @@
 const Web3 = require("web3");
-// const Big = require('big.js');
-// const web3 = new Web3(Web3.givenProvider || "ws://localhost:7545");
 const web3 = new Web3(new Web3.providers.HttpProvider("https://babel-api.testnet.iotex.io"));
+/************************************************/
+/*  Step 3.1: define contract address and admin */
+/************************************************/
+const contract_address = "0x9E87740bf851f53F63B401FfAE94111Fc2F125Ba"  // iotex testnet
+const contract_admin = "0xE9cebA328C78a43A492463f72DE80e4e1a2Df04d"
+/************************************************/
+/*       Step 3.2: define contract Abi          */
+/************************************************/
 const driveSlowSafeAbi = [
     {
         "inputs": [],
@@ -535,8 +541,6 @@ const driveSlowSafeAbi = [
         "type": "function"
     }
 ]
-// const contract_address = "0xa801e8d1c9D5f7d5fCe1310bFD7d96ad0A6746d8"  // ganache
-const contract_address = "0x9E87740bf851f53F63B401FfAE94111Fc2F125Ba"  // ganache
 const smartContract = new web3.eth.Contract(driveSlowSafeAbi, contract_address);
 
 const { CognitoIdentityClient } = require('@aws-sdk/client-cognito-identity');
@@ -545,13 +549,19 @@ const { S3Client, ListObjectsCommand } = require("@aws-sdk/client-s3");
 
 const nodeFetch = require("node-fetch");
 const BlueBird = require("bluebird");
+nodeFetch.Promise = BlueBird;
 
+/************************************************/
+/* Step 3.3: set path to the admin private key  */
+/************************************************/
 const fs = require('fs');
 const privateKey = fs.readFileSync("./.secret").toString().trim();
 
-nodeFetch.Promise = BlueBird;
-
+/************************************************/
+/* Step 3.4: set AWS Region, id pool and bucket */
+/************************************************/
 const REGION = "us-west-2";
+const bucketName = "vactracker";
 const s3 = new S3Client({
     region: REGION,
     credentials: fromCognitoIdentityPool({
@@ -560,11 +570,13 @@ const s3 = new S3Client({
     }),
 });
 
-const bucketName = "vactracker";
+/************************************************/
+/*      Step 3.5: set the required params       */
+/************************************************/
+const time = 30;  // time to calculate speed between to gps points
+const maxVelocity = 80;  // km per hour. Speed limit
+const checkInterval = 5000;  // interval to pull messages from s3 bucket
 
-const time = 30;
-const maxVelocity = 80;  // km per hour
-const checkInterval = 5000;
 const datapoints = {};
 const devices = {};
 
@@ -611,7 +623,7 @@ async function sendDataToContract(objJson) {
     let transaction_obj = {
         gas: 3000000,
         data: encoded_tx,
-        from: "0xE9cebA328C78a43A492463f72DE80e4e1a2Df04d",
+        from: contract_admin,
         to: contract_address
     }
 
