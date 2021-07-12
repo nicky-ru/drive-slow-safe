@@ -116,7 +116,10 @@ contract DriveSlowSafe {
         _;
     }
 
-    // ADMINISTRATOR FUNCTIONS
+    /************************************************/
+    /*              ADMIN FUNCTIONS                 */
+    /************************************************/
+
     /** @dev lets the administrator to register a device
     * @param _walletAddress Eth address of a device derived from a device's public key
     * @param _imei IMEI of a device
@@ -158,37 +161,49 @@ contract DriveSlowSafe {
         selfdestruct(administrator);
     }
 
-    /// Policy holder functions
+    /************************************************/
+    /*              USER FUNCTIONS                  */
+    /************************************************/
+
+    /** @dev lets the user to register a new Vehicle, sign a policy and pay a premium
+    * @param _brand Brand of the insured Vehicle
+    * @param _model Model of the insured Vehicle
+    * @param _year Year of the insured Vehicle
+    * @param _device Eth address of a Pebble tracker installed into the vehicle
+    */
     function signPolicy(string memory _brand, string memory _model, string memory _year, address _device) public payable {
         require(msg.value > 0, "The premium cannot be 0");
         require(!devices[_device].hasOrder, "This device already has an order");
         require(devices[_device].status == Status.whitelisted, "This device is not approved yet");
 
-        // activate policy holder account
+        // activate policy holder account if not active yet
+        // Todo: move to require()
         if (!holders[msg.sender].isActive) {
             activateAccount(msg.sender);
         }
 
-        bytes32 _vehicleId = registerVehicle(_brand, _model, _year);
-        bytes32 hash = keccak256(abi.encodePacked(msg.sender, _vehicleId, _device, msg.value));
-
-        // Record policy
-        uint256 toLock = holders[msg.sender].multiplier * msg.value;
-        require(toLock <= balance, "The contract balance is insuficient to guarantee this policy");
-        policies[hash] = Policy(true, msg.sender, _vehicleId, _device, msg.value, toLock, 0);
-        policyIDs.push(hash);
-
-        // add premium and supstract locked funds to the contract balance
-        balance -= toLock;
-        balance += msg.value;
-
-        // Record change in device
-        devices[_device].policy = hash;
-        devices[_device].hasOrder = true;
-
-        holders[msg.sender].policies.push(hash);
+        // Todo: move to a separate function
+        bytes32 _vehicleId = registerVehicle(_brand, _model, _year);  // register vehicle
+        // policy
+        bytes32 hash = keccak256(abi.encodePacked(msg.sender, _vehicleId, _device, msg.value));  // generate ID for Policy
+        uint256 toLock = holders[msg.sender].multiplier * msg.value;  // calculate an amount to lock by smart contract
+        require(toLock <= balance, "The contract balance is insufficient to guarantee this policy");
+        policies[hash] = Policy(true, msg.sender, _vehicleId, _device, msg.value, toLock, 0);  // create a new policy
+        policyIDs.push(hash);  // record new policy id
+        // contract
+        balance -= toLock;  // remove guarantee funds locked into the policy
+        balance += msg.value;  // add premium payed by the user
+        // device
+        devices[_device].policy = hash;  // connect device to the policy
+        devices[_device].hasOrder = true;  // activate device (Todo: remove)
+        // user
+        holders[msg.sender].policies.push(hash);  // add policy to user's policies
     }
 
+    /** @dev lets the user to claim funds, user pays 10% of repair
+    * @param _partner Eth address of the partner
+    * @param _policy Id of the Policy associated with the vehicle
+    */
     function payRepair(address payable _partner, bytes32 _policy) public payable {
         require(msg.value > 0, "The repair fee should be more than 0");
         require(partners[_partner].registered, "The given partner address doesn't exist among registered partners");
