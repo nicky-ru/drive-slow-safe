@@ -124,17 +124,21 @@ Usage of the dapp for admin and user
 - Register a new Pebble Device from admin pannel and send the registered device to a new User.
 - Register new partners (trusted car repair shops) from admin panel
 - (In future version) Add funds to the contract
-### User
+### User (Policy Holder)
 - Install the received Pebble Tracker into the vehicle
 - Sign a policy with the vehicle and device information + pay the Premium
 - In case of an accident choose a Car repair shop among **Partners** and claim funds
+- More signed policies leads to more Trust in the Holder, i.e., more funds to claim.
 #### Notes: 
 1) The user needs to pay 10% of the claimed funds and not more than there is locked in the Policy.
 2) Claimable funds don't sum up from multiple policies. Claimable amount is based on each Policy independently.
 3) One user can sign multiple Policies. One Policy - One device (i.e one Vehicle)
 4) Claimable funds cannot be withdrawn to the User's address, but only spent in form of paying for repair service to a chosen **Partner**
 ## Roadmap
-Todo
+1) Implement IoTeX DID
+2) Add more sophisticated insurance formula
+3) Add tracking and bonuses for eco-friendliness: noise tracking, gas emissions tracking.
+4) **Remove penalties and try to incentivize Users for safe riding with more bonuses and Trust points**.
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
