@@ -1,58 +1,59 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.5.13;
-
-/// control speed limit and gps point of speeding
-/// distance for bonus
 // Todo: add safemath
 // Todo: review uint sizes and downgrade where possible
 // Todo: add pagination on getters
+// Todo: add events
+// Todo: add fallback function
 
+/** @title Drive Slow Safe. */
 contract DriveSlowSafe {
-    /// WHO
+
+    // Upon signing a transaction a user automatically becomes a policy holder
     struct Holder {
-        bool isActive;
+        bool isActive;  // Todo: change to "has active policies"
         uint256 rating;
         uint256 multiplier;
         uint256 penaltyMultiplier;
-        //        uint accumulatedKM;
         bytes32[] penalties;
         bytes32[] policies;
+        // Todo: add accumulatedKM property to add additional bonuses
     }
 
-    /// WHAT
+    // A vehicle is an object of insurance
     struct Vehicle {
-        bool registered;
+        // Todo: add owner
+        bool registered;  // Todo: remove this property later
         string brand;
         string model;
         string year;
-        // string vin;
     }
 
-    /// WITH
+    // An IoTeX Pebble Tracker
     struct Device {
-        //Intrinsic properties
+        // Todo: add block data
+        // Todo: add name of the device
         string imei;
-        bool hasOrder;
-        // uint32 freq;
-        Status status;
-        bytes32 policy;
+        bool hasOrder;  // Todo: remove property later (if the device has no policies assigned equals it has no order)
+        Status status;  // Waiting approval or Whitelisted or Blocked
+        bytes32 policy;  // Currently assigned active policy
     }
 
-    /// ON WHAT CONDITIONS
     struct Policy {
-        bool isActive;
-        address policyHolder;
-        bytes32 vehicle;
-        address device;
-        // string startDate;
-        // string endDate;
-        uint256 premium;
-        uint256 locked;
-        uint256 fundsUsed;
+        // Todo: add start and end date
+        bool isActive;  // false if not signed yet or already expired
+        address policyHolder;  // A user who signed the Policy
+        bytes32 vehicle;  // An object of insurance
+        address device;  // A Pebble Tracker
+        uint256 premium;  // An amount to be paid for a contract of insurance
+        uint256 locked;  // Locked funds by the smart contract as a guarantee
+        uint256 fundsUsed;  // Whenever a holder claims funds successfully the value is being add up
     }
 
-    /// Will be used to store meaningful data data points
+    // Will be used to store data points with penalties
     struct DataPoint {
+        // At the moment we use distance (between two gps points) to calculate Velocity
+        // But we could consider to use accelerometer and gyroscope to calculate more precise data
         string[3] accelerometer;
         string latitude;
         string longitude;
@@ -60,26 +61,36 @@ contract DriveSlowSafe {
         string timestamp;
     }
 
+    // A real and trusted car repair shop that will be responsible
+    // for repairments of the crashed car
+    // Partner is the only role to get claimable funds
+    // CONSIDERATION: if a user is happens to be partner in physical world or has some sort of connections
+    // with the partner, he could recursively claim funds in his favour. Need to find a way to solve the problem.
     struct Partner {
+        // Todo: add more information, e.g. location (country, city, address), contacts, works done, reviews
         bool registered;
         string name;
     }
 
+    // Registration status for Pebble devices.
+    // The smart contract will receive messages only from whitelisted devices
     enum Status {
-        waitingApproval,
-        whitelisted,
-        blocked
+        // Todo: separate waiting approval and unknown
+        waitingApproval,  // waiting approval, unknown
+        whitelisted,  // Whitelisted by administrator
+        blocked  // Blocked by administrator
     }
 
+    address payable public administrator;  // creator of the contract
+    uint256 public balance;  // unlocked balance of the smart contract
     /// STORAGE MAPPINGS
-    address payable public administrator;
-    address[] private holdersIDs;
-    bytes32[] private vehiclesIds;
-    address[] private deviceIDs;
-    bytes32[] private policyIDs;
-    address[] private partnersIDs;
+    address[] private holdersIDs;  // all users addresses who once signed policies
+    bytes32[] private vehiclesIds;  // all registered vehicles
+    address[] private deviceIDs;  // all registered Pebble devices
+    bytes32[] private policyIDs;  // all signed policies
+    address[] private partnersIDs;  // all registered partners
     mapping (address => Holder) public holders;
-    mapping (bytes32 => Vehicle) public vehicles;
+    mapping (bytes32 => Vehicle) public vehicles;  // Todo: make VIN property to be the key in mappings
     mapping (address => Device) public devices;
     mapping (bytes32 => Policy) public policies;
     mapping (bytes32 => DataPoint) public dataPoints;
@@ -88,12 +99,13 @@ contract DriveSlowSafe {
     /************************************************/
     /*           Step 1.3: set multipliers          */
     /************************************************/
+    // Todo: add according setters
     uint32 private alpha = 2;  // to calculate multipliers of users
     uint32 private theta = 1000; // to calculate penalty multiplier
     uint32 private speed = 50;  // maximal allowed speed
-    uint256 public balance;
 
     constructor() public payable {
+        // Todo: make separate function for funding the contract
         require(msg.value > 0, "The contract need to be funded");
         administrator = msg.sender;
         balance = msg.value;
@@ -104,9 +116,14 @@ contract DriveSlowSafe {
         _;
     }
 
-    /// Admin functions
+    // ADMINISTRATOR FUNCTIONS
+    /** @dev lets the administrator to register a device
+    * @param _walletAddress Eth address of a device derived from a device's public key
+    * @param _imei IMEI of a device
+    * Todo: separate register device (anybody can register a device) and approve device (only administrator)
+    */
     function approveDevice(address _walletAddress, string memory _imei) public onlyAdministrator {
-        require(devices[_walletAddress].status == Status.waitingApproval, "This device has already been registered");
+        require(devices[_walletAddress].status == Status.waitingApproval, "This device has already been approved");
 
         devices[_walletAddress].imei = _imei;
 
@@ -115,16 +132,28 @@ contract DriveSlowSafe {
         } else {
             devices[_walletAddress].status = Status.waitingApproval;
         }
-        deviceIDs.push(_walletAddress);  // POSSIBLE BUG may create two id in the array
+        deviceIDs.push(_walletAddress);  // POSSIBLE BUG may create duplicated entry
     }
 
-    function registerPartner(address _partner, string memory name) public onlyAdministrator {
+    // Todo: add block device function
+    // Todo: add unblock device function
+    // Todo: add delete device function
+
+    /** @dev lets the administrator to register a partner
+    * @param _partner Eth address of a partner to transfer funds
+    * @param _name Real world organisation name of the partner
+    */
+    function registerPartner(address _partner, string memory _name) public onlyAdministrator {
         require(!partners[_partner].registered, "This partner has already been registered");
 
-        partners[_partner] = Partner(true, name);
+        partners[_partner] = Partner(true, _name);
         partnersIDs.push(_partner);
     }
 
+    // Todo: add block/delete partner function
+
+    // The function bring potential risk of a rug pull.
+    // Todo: add condition, require(there is no active policies)
     function kill() public onlyAdministrator {
         selfdestruct(administrator);
     }
