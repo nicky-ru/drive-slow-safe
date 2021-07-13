@@ -18,6 +18,7 @@ contract DriveSlowSafe {
         bytes32[] penalties;
         bytes32[] policies;
         // Todo: add accumulatedKM property to add additional bonuses
+        // Todo: add claims
     }
 
     // A vehicle is an object of insurance
@@ -102,6 +103,7 @@ contract DriveSlowSafe {
     // Todo: add according setters
     uint32 private alpha = 2;  // to calculate multipliers of users
     uint32 private theta = 1000; // to calculate penalty multiplier
+    uint32 private initialRating = 1;  // initial rating of new users
     uint32 private speed = 50;  // maximal allowed speed
 
     constructor() public payable {
@@ -207,26 +209,39 @@ contract DriveSlowSafe {
     function payRepair(address payable _partner, bytes32 _policy) public payable {
         require(msg.value > 0, "The repair fee should be more than 0");
         require(partners[_partner].registered, "The given partner address doesn't exist among registered partners");
-        require(policies[_policy].policyHolder == msg.sender, "Only owner of the policy can claim the funds");
+        require(policies[_policy].policyHolder == msg.sender, "Only the holder of the policy can claim funds");
 
+        // maximum amount of funds claimable from the chosen policy with applied penalty multiplier
         uint256 claimable = holders[msg.sender].penaltyMultiplier * policies[_policy].locked / theta;
-        uint256 cleanGrant = holders[msg.sender].multiplier * msg.value;  // the grant without applied penalties
+        // the amount of funds that user claims without applying penalties
+        uint256 cleanGrant = holders[msg.sender].multiplier * msg.value;
+        // the amount of funds that user claims with applying penalties
         uint256 grant = cleanGrant * holders[msg.sender].penaltyMultiplier / theta;
-        require(grant <= claimable, "The claimable amount exeeds the limit");
+        require(grant <= claimable, "The claimable amount exceeds the limit");
 
-        // the funds that the contract should transfer to the partner
-        uint256 toPay = msg.value + grant;
-        policies[_policy].locked -= cleanGrant;
-        policies[_policy].fundsUsed += grant;
+        uint256 toPay = msg.value + grant;  // the funds that the contract should transfer to the partner
+        policies[_policy].locked -= cleanGrant;  // remove claimed funds from the policy
+        policies[_policy].fundsUsed += grant;  // record the claimed funds amount
 
         _partner.transfer(toPay);
     }
 
-    /// backend functions
+    /************************************************/
+    /*              SERVER FUNCTIONS                */
+    /************************************************/
+
+    /** @dev lets the server to record a data point received from a device
+    * @param _accel1, _accel2, _accel3 Values of 3-axis accelerometer
+    * @param _latitude, _longitude Values of GPS
+    * @param _random randomly openssl generated hex string
+    * @param _timestamp Timestamp of message creation
+    * @param _r, _s fist and second half of a signature, generated with a private key of a Pebble device
+    */
     function receiveMessage(
         string memory _accel1, string memory _accel2, string memory _accel3, string memory _latitude, string memory _longitude,
         string memory _random, string memory _timestamp, bytes32 _r, bytes32 _s
     ) public {
+        // Message recreation for verification
         string memory _message = string(abi.encodePacked(
                 "{\"message\":{\"accelerometer\":[", _accel1 ,",", _accel2 ,",", _accel3, "],\"latitude\":",
                 _latitude, ",\"longitude\":", _longitude, ",\"timestamp\":\"", _timestamp, "\",\"random\":\"", _random, "\"}}"
@@ -237,14 +252,19 @@ contract DriveSlowSafe {
 
         address _deviceId = verifyMessage(hash, _r, _s);
         require(!(_deviceId == address(0)), "This message didn't pass the verification");
+        // prevent the message inflow from inactive devices
+        // If the message isn't verified the transaction signer doesn't need to pay gas for transaction until this point
         require(devices[_deviceId].hasOrder, "This device has no order yet");
-
+        // generate datapoint id
         dataPoints[hash] = DataPoint([_accel1, _accel2, _accel3], _latitude, _longitude, _random, _timestamp);
-        bytes32 policy = devices[_deviceId].policy;
-        address holder = policies[policy].policyHolder;
+        // find the holder of the device that created the message
+        address holder = policies[devices[_deviceId].policy].policyHolder;
         applyPenalty(holder, hash);
     }
 
+    /** @dev lets the server to deactivate an expired policy
+    * @param _policy ID of the policy
+    */
     function cancelPolicy(bytes32 _policy) public {
         // Todo: set policy deactivation
         // require time.now > policy.endDate
@@ -260,25 +280,34 @@ contract DriveSlowSafe {
         devices[device].policy = bytes32(0);
 
         // upgrade user rating for successful policy usage
+        // Todo: only in the case if the user had no penalties
         updateRating(policies[_policy].policyHolder, true);
 
         balance += unlocking;
     }
 
-    /// utility functions
+    /************************************************/
+    /*              UTILITY FUNCTIONS               */
+    /************************************************/
+
     function activateAccount(address _holderAddress) internal {
         require(!holders[_holderAddress].isActive, "The account has already been activated");
         holders[_holderAddress].isActive = true;
-        holders[_holderAddress].rating = 1;
+        holders[_holderAddress].rating = initialRating;
+        holders[_holderAddress].multiplier = alpha * initialRating;
         holders[_holderAddress].penaltyMultiplier = theta;
         holdersIDs.push(_holderAddress);
-        updateMultiplier(_holderAddress);
     }
 
+    /** @dev updates users multiplier based on alpha and user's rating */
     function updateMultiplier(address _holderAddress) internal {
         holders[_holderAddress].multiplier = alpha * holders[_holderAddress].rating;
     }
 
+    /** @dev updates the rating of the user after getting a bonus or a penalty
+    * @param _holderAddress Eth address of the user
+    * @param _positive True if bonus, false if penalty
+    */
     function updateRating(address _holderAddress, bool _positive) internal {
         uint256 prevState = holders[_holderAddress].rating;
 
@@ -289,7 +318,6 @@ contract DriveSlowSafe {
                 holders[_holderAddress].rating = holders[_holderAddress].rating - 1;
             }
         }
-
         if (prevState != holders[_holderAddress].rating) {
             updateMultiplier;
         }
@@ -304,26 +332,42 @@ contract DriveSlowSafe {
         return car_hash;
     }
 
+    /** @dev verifies a message that was signed with elliptic curve algorithm
+    * @param _hash keccak256 hash of the initial message
+    * @param _r, _s fist and second half of a signature, generated with a private key of a Pebble device
+    * @return _deviceId address of the recovered signer
+    */
     function verifyMessage(bytes32 _hash, bytes32 _r, bytes32 _s) internal view returns(address _deviceId) {
+        // depending on the version of a pebble device the user is using
+        // it can implement one of two versions of signature
+        // in the first version v = 27, the second one v = 28
+        // In case of elliptic curve we will have two possible signers
         for (uint8 v = 27; v < 29; v++) {
             _deviceId = ecrecover(_hash, v, _r, _s);
-
+            // if the retrieved address is already registered,
+            // we can think that the message integrity and source are correct
             if (devices[_deviceId].status == Status.whitelisted) {
                 return(_deviceId);
             }
         }
-        return address(0);
+        return address(0);  // if no such addresses registered, return address of zero
     }
 
     function applyPenalty(address _holder, bytes32 _dataPoint) internal {
-        holders[_holder].penalties.push(_dataPoint);
-        //        updateRating(_holder, false);
+        holders[_holder].penalties.push(_dataPoint);  // save penalty
+        // update user's penalty multiplier
         uint256 _penaltyMultiplier = holders[_holder].penaltyMultiplier;
         _penaltyMultiplier -= 1;
+        // penalty multiplier cannot be 0, or user won't be able to claim funds at all
         if (_penaltyMultiplier > 0) {
             holders[_holder].penaltyMultiplier = _penaltyMultiplier;
         }
     }
+
+
+    /************************************************/
+    /*                  GETTERS                     */
+    /************************************************/
 
     function showMyPenalties() public view returns(bytes32[] memory){
         return holders[msg.sender].penalties;
