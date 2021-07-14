@@ -15,7 +15,7 @@ import {Device} from "./pages/Device";
 import {DataPoint} from "./pages/DataPoint";
 
 import { ErrorBoundary } from 'react-error-boundary';
-import {updateAccount, unlock, lock} from "./redux/actions/wallet";
+import {updateAccount, lock} from "./redux/actions/wallet";
 import {isAdmin} from "./redux/actions/user";
 import {ToolConfig} from "./pages/Admin/tools";
 import {Holder} from "./pages/Holder";
@@ -39,16 +39,10 @@ function App() {
   // define App state helpers
   const dispatch = useDispatch();
   const contractAdmin = useSelector((state) => state.contract.admin);
-  // const isLocked = useSelector((state) => state.wallet.isLocked);
   const address = useSelector((state) => state.wallet.address);
 
   useEffect(() => {
     const {ethereum} = window;
-
-    ethereum._metamask.isUnlocked()
-        .then((resp) => {
-          if (resp) dispatch(unlock);
-        });
 
     ethereum
         .request({method: 'eth_accounts'})
@@ -63,7 +57,6 @@ function App() {
   const handleAccountsChanged = (accounts) => {
     if (accounts.length === 0) {
       console.log('Please connect to MetaMask.');
-      dispatch(lock());
     } else {
       dispatch(updateAccount(accounts[0]));
       dispatch(isAdmin(accounts[0].toUpperCase() === contractAdmin.toUpperCase()));

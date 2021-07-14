@@ -12,12 +12,6 @@ export function wallet(state = initialState.wallet, action) {
         case types.wallet.UPDATE_CHAIN: {
             return {...state, chainId: action.chainId};
         }
-        case types.wallet.UNLOCK: {
-            return {...state, isLocked: false};
-        }
-        case types.wallet.LOCK: {
-            return {...state, isLocked: true};
-        }
         default:
             return state;
     }
