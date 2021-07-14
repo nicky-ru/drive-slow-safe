@@ -3,13 +3,6 @@ import * as types from "../constants/types";
 
 export function contract(state = initialState.contract, action) {
     switch (action.type) {
-        case types.contract.UPDATE: {
-            const { address, admin } = action;
-            return {
-                address: address,
-                admin: admin
-            };
-        }
         case types.contract.GET_ADDRESS: {
             return {...state, address: action.address};
         }
