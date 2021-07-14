@@ -1,9 +1,5 @@
 export const wallet = {
-    CONNECT: 'dss/wallet/connect',
-    LOCK: 'dss/wallet/lock',
-    UNLOCK: 'dss/wallet/unlock',
     UPDATE_ADDRESS: 'dss/wallet/changeAddress',
-    UPDATE_CHAIN: 'dss/wallet/changeChain',
 }
 
 export const contract = {
