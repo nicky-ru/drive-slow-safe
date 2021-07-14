@@ -39,7 +39,8 @@ function App() {
   // define App state helpers
   const dispatch = useDispatch();
   const contractAdmin = useSelector((state) => state.contract.admin);
-  const isLocked = useSelector((state) => state.wallet.isLocked);
+  // const isLocked = useSelector((state) => state.wallet.isLocked);
+  const address = useSelector((state) => state.wallet.address);
 
   useEffect(() => {
     const {ethereum} = window;
@@ -96,7 +97,7 @@ function App() {
                   <Header/>
                   <Switch>
                       <Route path={'/'} exact key={'/'}>
-                          {isLocked ?
+                          {address === '' ?
                               <Start handleConnect={handleConnect}/> :
                               <Redirect to={'/user'}/>
                           }
