@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 
 import { ChakraProvider, Button, Container, Center } from "@chakra-ui/react";
@@ -20,7 +20,8 @@ import {isAdmin} from "./redux/actions/user";
 import {ToolConfig} from "./pages/Admin/tools";
 import {Holder} from "./pages/Holder";
 import {Partner} from "./pages/Partner";
-
+import smartContract from './contract/driveSlowSafe';
+import {getAdmin} from "./redux/actions/contract";
 const ErrorFallback = ({ error, resetErrorBoundary }) => {
     return (
         <Container role="alert">
@@ -43,6 +44,9 @@ function App() {
 
   useEffect(() => {
     const {ethereum} = window;
+
+    smartContract.methods.administrator().call()
+        .then((admin) => dispatch(getAdmin(admin)));
 
     ethereum
         .request({method: 'eth_accounts'})

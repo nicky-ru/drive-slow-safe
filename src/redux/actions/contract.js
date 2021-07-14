@@ -8,6 +8,13 @@ export function updateContract(address, admin) {
     };
 }
 
+export function getAdmin(admin) {
+    return {
+        type: types.contract.GET_ADMIN,
+        admin
+    };
+}
+
 export function setPolicies(policies) {
     return {
         type: types.contract.SET_POLICIES,

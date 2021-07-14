@@ -10,6 +10,9 @@ export function contract(state = initialState.contract, action) {
                 admin: admin
             };
         }
+        case types.contract.GET_ADMIN: {
+            return {...state, admin: action.admin};
+        }
         case types.contract.SET_POLICIES: {
             return {...state, policies: action.policies};
         }
