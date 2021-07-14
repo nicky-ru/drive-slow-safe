@@ -16,7 +16,6 @@ import {DataPoint} from "./pages/DataPoint";
 
 import { ErrorBoundary } from 'react-error-boundary';
 import {updateAccount} from "./redux/actions/wallet";
-import {isAdmin} from "./redux/actions/user";
 import {ToolConfig} from "./pages/Admin/tools";
 import {Holder} from "./pages/Holder";
 import {Partner} from "./pages/Partner";
@@ -39,24 +38,33 @@ const ErrorFallback = ({ error, resetErrorBoundary }) => {
 function App() {
   // define App state helpers
   const dispatch = useDispatch();
-  const contractAdmin = useSelector((state) => state.contract.admin);
   const address = useSelector((state) => state.wallet.address);
 
   useEffect(() => {
-    const {ethereum} = window;
+      async function initApp() {
+          try {
+              smartContract.methods.administrator().call()
+                  .then((admin) => dispatch(getAdmin(admin)));
+          } catch (e) {
+              console.log("error getting contract admin: ", e);
+          }
 
-    smartContract.methods.administrator().call()
-        .then((admin) => dispatch(getAdmin(admin)));
-
-    dispatch(getAddress(smartContract.options.address));
-
-    ethereum
-        .request({method: 'eth_accounts'})
-        .then(handleAccountsChanged)
-        .catch((err) => {
-          console.error(err);
-        })
-
+          try {
+              dispatch(getAddress(smartContract.options.address));
+          } catch (e) {
+              console.log("error getting contract address: ", e);
+          }
+      }
+      const {ethereum} = window;
+      initApp()
+          .then(() => {
+              ethereum
+                  .request({method: 'eth_accounts'})
+                  .then(handleAccountsChanged)
+                  .catch((err) => {
+                      console.error(err);
+                  })
+          })
     ethereum.on('accountsChanged', handleAccountsChanged);
   }, []);
 
@@ -65,8 +73,6 @@ function App() {
       console.log('Please connect to MetaMask.');
     } else {
       dispatch(updateAccount(accounts[0]));
-      // Todo: add isAdmin function to smart contract
-      dispatch(isAdmin(accounts[0].toUpperCase() === contractAdmin.toUpperCase()));
     }
   }
 

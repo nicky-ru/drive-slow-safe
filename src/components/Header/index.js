@@ -11,6 +11,7 @@ export const Header = observer(() => {
     const { colorMode, toggleColorMode } = useColorMode();
     const currentAccount = useSelector((state => state.wallet.address));
     const userIsAdmin = useSelector((state) => state.user.isAdmin);
+    const admin = useSelector((state) => state.contract.admin);
 
     return(
         <Box>
@@ -45,7 +46,7 @@ export const Header = observer(() => {
 
                     <Stack direction={'row'} align={'center'} spacing={2} flex={{ base: 1, md: 'auto' }} justify={'flex-end'}>
                         <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
-                            {userIsAdmin ? <Text>Admin_</Text> : <Text>User_</Text>}
+                            {currentAccount.toUpperCase() === admin.toUpperCase() ? <Text>Admin_</Text> : <Text>User_</Text>}
                             <Text>{currentAccount}</Text>
                         </Flex>
                         <IconButton borderRadius="12" aria-label={'Toggle Color Mode'} onClick={toggleColorMode} icon={colorMode === 'light' ? <IoMoon size={18} /> : <IoSunny size={18} />} />
