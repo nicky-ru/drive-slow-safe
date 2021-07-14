@@ -4,6 +4,7 @@ export const wallet = {
 
 export const contract = {
     UPDATE: 'dss/contract/update',
+    GET_ADDRESS: 'dss/contract/getAddress',
     GET_ADMIN: 'dss/contract/getAdmin',
     SET_POLICIES: 'dss/contract/setPolicies',
     SET_DEVICES: 'dss/contract/setDevices',

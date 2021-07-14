@@ -2,13 +2,9 @@ export default {
     wallet: {
         address: ''
     },
-    /************************************************/
-    /* Step 2.3: define contract address and admin  */
-    /************************************************/
     contract: {
-        // Todo: make this state update automatically
-        address: '0xac492bFb17C1dfbcDBb2Eab66819d536dD8Ac574',
-        admin: '0xE9cebA328C78a43A492463f72DE80e4e1a2Df04d',
+        address: '',
+        admin: '',
         balance: 0,
         policies: [],
         devices: [],

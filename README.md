@@ -112,9 +112,7 @@ Here are the steps to prepare and build the WebUI.
 In `drive-slow-safe-react/src/contract/driveSlowSafe.js` set the contract address to the one from step 1.4.
 ### Step 2.2: Contract Abi
 In `drive-slow-safe-react/src/contract/driveSlowSafeAbi.js` set the contract Abi to the one from step 1.4.
-### Step 2.3: Contract Admin
-In `drive-slow-safe-react/src/redux/constants/initialState.js` set the contract address and admin.
-### Step 2.4: Build
+### Step 2.3: Build
 In command line run
 ```bash
 yarn build

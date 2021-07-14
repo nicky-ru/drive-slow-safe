@@ -21,7 +21,7 @@ import {ToolConfig} from "./pages/Admin/tools";
 import {Holder} from "./pages/Holder";
 import {Partner} from "./pages/Partner";
 import smartContract from './contract/driveSlowSafe';
-import {getAdmin} from "./redux/actions/contract";
+import {getAddress, getAdmin} from "./redux/actions/contract";
 const ErrorFallback = ({ error, resetErrorBoundary }) => {
     return (
         <Container role="alert">
@@ -48,6 +48,8 @@ function App() {
     smartContract.methods.administrator().call()
         .then((admin) => dispatch(getAdmin(admin)));
 
+    dispatch(getAddress(smartContract.options.address));
+
     ethereum
         .request({method: 'eth_accounts'})
         .then(handleAccountsChanged)
@@ -63,6 +65,7 @@ function App() {
       console.log('Please connect to MetaMask.');
     } else {
       dispatch(updateAccount(accounts[0]));
+      // Todo: add isAdmin function to smart contract
       dispatch(isAdmin(accounts[0].toUpperCase() === contractAdmin.toUpperCase()));
     }
   }

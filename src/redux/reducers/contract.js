@@ -10,6 +10,9 @@ export function contract(state = initialState.contract, action) {
                 admin: admin
             };
         }
+        case types.contract.GET_ADDRESS: {
+            return {...state, address: action.address};
+        }
         case types.contract.GET_ADMIN: {
             return {...state, admin: action.admin};
         }
