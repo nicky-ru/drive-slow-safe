@@ -10,7 +10,6 @@ export const Header = observer(() => {
     const { isOpen: isMobileNavOpen, onToggle } = useDisclosure();
     const { colorMode, toggleColorMode } = useColorMode();
     const currentAccount = useSelector((state => state.wallet.address));
-    const userIsAdmin = useSelector((state) => state.user.isAdmin);
     const admin = useSelector((state) => state.contract.admin);
 
     return(

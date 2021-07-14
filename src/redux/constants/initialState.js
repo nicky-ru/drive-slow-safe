@@ -13,7 +13,7 @@ export default {
         partners: [],
     },
     user: {
-        isAdmin: false,
+        // isAdmin: false,
         policies: [],
         penalties: []
     },
