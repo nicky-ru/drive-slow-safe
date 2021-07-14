@@ -15,7 +15,7 @@ import {Device} from "./pages/Device";
 import {DataPoint} from "./pages/DataPoint";
 
 import { ErrorBoundary } from 'react-error-boundary';
-import {updateAccount, lock} from "./redux/actions/wallet";
+import {updateAccount} from "./redux/actions/wallet";
 import {isAdmin} from "./redux/actions/user";
 import {ToolConfig} from "./pages/Admin/tools";
 import {Holder} from "./pages/Holder";
