@@ -21,6 +21,8 @@ import {Holder} from "./pages/Holder";
 import {Partner} from "./pages/Partner";
 import smartContract from './contract/driveSlowSafe';
 import {getAddress, getAdmin} from "./redux/actions/contract";
+
+const {ethereum} = window;
 const ErrorFallback = ({ error, resetErrorBoundary }) => {
     return (
         <Container role="alert">
@@ -43,29 +45,28 @@ function App() {
   useEffect(() => {
       async function initApp() {
           try {
-              smartContract.methods.administrator().call()
-                  .then((admin) => dispatch(getAdmin(admin)));
+              let admin = await smartContract.methods.administrator().call();
+              dispatch(getAdmin(admin));
           } catch (e) {
               console.log("error getting contract admin: ", e);
           }
-
           try {
               dispatch(getAddress(smartContract.options.address));
           } catch (e) {
               console.log("error getting contract address: ", e);
           }
+
+          ethereum
+              .request({method: 'eth_accounts'})
+              .then(handleAccountsChanged)
+              .catch((err) => {
+                  console.error(err);
+              })
       }
-      const {ethereum} = window;
-      initApp()
-          .then(() => {
-              ethereum
-                  .request({method: 'eth_accounts'})
-                  .then(handleAccountsChanged)
-                  .catch((err) => {
-                      console.error(err);
-                  })
-          })
-    ethereum.on('accountsChanged', handleAccountsChanged);
+
+      initApp();
+
+      ethereum.on('accountsChanged', handleAccountsChanged);
   }, []);
 
   const handleAccountsChanged = (accounts) => {
@@ -79,7 +80,7 @@ function App() {
   const handleConnect = () => {
     document.getElementById("connect-button").hidden = true;
 
-    window.ethereum
+    ethereum
         .request({method: 'eth_requestAccounts'})
         .then((accounts) => {
           handleAccountsChanged(accounts);
