@@ -40,6 +40,8 @@ period of time and the remaining locked funds will be unlocked back to the Smart
 This is the branch used for storing the Server side of the project.
 ## Demo
 [Here is a link to a demo published on YouTube](https://youtu.be/sXz3-jyW21Q)
+
+[Here is a link to a deployed website](https://drive-slow-safe-react.d14gz7bhl27u40.amplifyapp.com/)
 ## Project structure
 This repo contains three branches:
 1) drive-slow-safe-react (WebUI)
