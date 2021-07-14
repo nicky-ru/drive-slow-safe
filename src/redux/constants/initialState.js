@@ -1,7 +1,5 @@
 export default {
     wallet: {
-        isConnected: false,
-        chainId: '',
         address: ''
     },
     /************************************************/
