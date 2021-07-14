@@ -4,7 +4,7 @@ const web3 = new Web3(new Web3.providers.HttpProvider("https://babel-api.testnet
 /*  Step 3.1: define contract address and admin */
 /************************************************/
 const contract_address = "0x9E87740bf851f53F63B401FfAE94111Fc2F125Ba"  // iotex testnet
-const contract_admin = "0xE9cebA328C78a43A492463f72DE80e4e1a2Df04d"
+const contract_admin = "0xE9cebA328C78a43A492463f72DE80e4e1a2Df04d"  // address which will pay gas
 /************************************************/
 /*       Step 3.2: define contract Abi          */
 /************************************************/
@@ -541,8 +541,8 @@ const driveSlowSafeAbi = [
         "type": "function"
     }
 ]
-const smartContract = new web3.eth.Contract(driveSlowSafeAbi, contract_address);
-
+const smartContract = new web3.eth.Contract(driveSlowSafeAbi, contract_address);  // instantiate the DriveSlowSafe contract
+// Libraries for interacting with AWS S3
 const { CognitoIdentityClient } = require('@aws-sdk/client-cognito-identity');
 const { fromCognitoIdentityPool } = require("@aws-sdk/credential-provider-cognito-identity");
 const { S3Client, ListObjectsCommand } = require("@aws-sdk/client-s3");
@@ -574,12 +574,14 @@ const s3 = new S3Client({
 /*      Step 3.5: set the required params       */
 /************************************************/
 const time = 30;  // time to calculate speed between to gps points
+// Todo: get maxVelocity value from the contract
 const maxVelocity = 80;  // km per hour. Speed limit
 const checkInterval = 5000;  // interval to pull messages from s3 bucket
 
-const datapoints = {};
-const devices = {};
+const datapoints = {};  // {objKey: {processed: bool}}
+const devices = {};  // devices IMEI
 
+// Haversine formula to calculate distance between two gps points
 function calcDistance(lat1, lat2, lon1, lon2) {
     let R = 6371; // Radius of the earth in km
     let dLat = deg2rad(lat2-lat1);
@@ -598,24 +600,40 @@ function deg2rad(deg) {
     return deg * (Math.PI/180)
 }
 
-let count = 0;
+function countDigitsBeforePoint(num) {
+    if (num.abs() < 10) {
+        return 1;
+    } else if (num.abs() < 100) {
+        return 2;
+    } else if (num.abs() < 200) {
+        return 3;
+    }
+    return 0;  // Todo: return error
+}
 
+// Builds, signs and sends transaction to the smart contract
 async function sendDataToContract(objJson) {
-    let r = "0x" + objJson.signature.r;
-    let s = "0x" + objJson.signature.s;
-
     let acc1 = objJson.message.accelerometer[0].toString();
     let acc2 = objJson.message.accelerometer[1].toString();
     let acc3 = objJson.message.accelerometer[2].toString();
+    let rand = objJson.message.random;
+    let timestamp = objJson.message.timestamp;
+    let r = "0x" + objJson.signature.r;
+    let s = "0x" + objJson.signature.s;
 
+    // leading zeroes are being truncated, but we need to keep the same precision as in
+    // the original message, otherwise the resulting hash of the message will be different.
+    // We need to keep 9 digits after the point, e.g., 51.332628000
+    /** *******Todo: Better solution TO TEST***********
+    * let lat = objJson.message.latitude;
+    * lat = lat.toPrecision(countDigitsBeforePoint(lat) + 9).toString();
+    * let lon = objJson.message.longitude;
+    * lon = lon.toPrecision(countDigitsBeforePoint(lon) + 9).toString();
+    ******************************************* */
     let lat = objJson.message.latitude.toPrecision(11).toString();
     let lon = objJson.message.longitude;
     if (lon < 10) lon = lon.toPrecision(10).toString();
     else lon = lon.toPrecision(11).toString();
-    let rand = objJson.message.random;
-    let timestamp = objJson.message.timestamp;
-
-    console.log(acc1, acc2, acc3, lat, lon, rand, timestamp, r, s);
 
     let tx_builder = smartContract.methods.receiveMessage(acc1, acc2, acc3, lat, lon, rand, timestamp, r, s);
 
@@ -646,15 +664,16 @@ async function sendDataToContract(objJson) {
     }
 }
 
+// filtrate meaningful data points, if meaningful, invoke sendDataToContract()
 async function handleNewDataPoints() {
     for (let datapoint in datapoints) {
+        // check for new data points
         if (!datapoints[datapoint].processed) {
-            const deviceId = datapoint.split("/")[1];
-            const lastObjKey = devices[deviceId];
-
-            devices[deviceId] = datapoint;
-            datapoints[datapoint].processed = true;
-
+            const deviceId = datapoint.split("/")[1];  // parse device IMEI
+            const lastObjKey = devices[deviceId];  // choose the last data point that was being stored for this device
+            devices[deviceId] = datapoint;  // update latest data point for current device
+            datapoints[datapoint].processed = true;  // mark new data point as processed
+            // get previous and last data points json
             const objJson = await viewObject(datapoint);
             const objJsonPrev = await viewObject(lastObjKey);
 
@@ -666,37 +685,41 @@ async function handleNewDataPoints() {
                 console.log(lat1, lon1, lat1, lon2);
 
                 const dist = calcDistance(lat1, lat2, lon1, lon2);
-
+                /** ********* BUG **********/
                 const velocity = dist * time;  // km per hour
-                console.log("Distance: ", dist, "Velocity: ", velocity);
+                /** ************************/
+                /** *********Todo:TO TEST **********/
+                /** const velocity = dist / time;  // km per hour */
+                /** ***************************************/
 
+                console.log("Distance: ", dist, "Velocity: ", velocity);
+                // check if speed exceeds the limit, if yes, send message to contract to register the message
                 if (velocity > maxVelocity) {
                     sendDataToContract(objJson);
                 }
-                // if (count === 0) {
-                //     sendDataToContract(objJson);
-                //     count++;
-                // }
-
             } catch (e) {}
         }
     }
 }
 
+// lists IMEI of all devices from S3 bucket
 async function listDevices() {
     try {
         const data = await s3.send(
             new ListObjectsCommand({Prefix: "device/", Delimiter: "/", Bucket: bucketName})
         );
         await data.CommonPrefixes.map(async function (object) {
-            const deviceId = object.Prefix.split("/")[1];
+            const deviceId = object.Prefix.split("/")[1];  // retrieve IMEI
+            // add device IMEI to the devices dictionary
             if (!devices[deviceId]) {
                 devices[deviceId] = "";
             }
+            // list data points from the device folder
             let prefix = object.Prefix + 'data/';
             const _obj =  await s3.send(
                 new ListObjectsCommand({Prefix: prefix, Delimiter: "/", Bucket: bucketName})
             );
+            // add new data points to the data points dictionary
             _obj.Contents.map(async function (obj) {
                 let objKey = obj.Key;
                 if (!datapoints[objKey]) {
@@ -710,12 +733,12 @@ async function listDevices() {
     }
 }
 
+// get json of data point
 async function viewObject (objectKey) {
     try {
         let href = "https://s3." + REGION + ".amazonaws.com/";
         let bucketUrl = href + bucketName + "/";
         let objectUrl = bucketUrl + encodeURIComponent(objectKey);
-        // console.log(objectUrl);
 
         const objectJson = await nodeFetch(objectUrl).then((response) => response.json())
         return objectJson;
@@ -724,18 +747,8 @@ async function viewObject (objectKey) {
     }
 }
 
-function showDP() {
-    console.log(datapoints);
-    console.log("___BREAK___");
-}
-
-function showDevices() {
-    console.log(devices);
-}
-
+// retrieve and handle data points with intervals
 (async() => {
     setInterval(listDevices, checkInterval);
     setInterval(handleNewDataPoints, checkInterval);
-    // setInterval(showDevices, 5000);
-    // setInterval(showDP, 5000);
 })();
