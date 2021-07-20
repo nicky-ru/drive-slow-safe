@@ -19,7 +19,6 @@ import {updateAccount} from "./redux/actions/wallet";
 import {ToolConfig} from "./pages/Admin/tools";
 import {Holder} from "./pages/Holder";
 import {Partner} from "./pages/Partner";
-import smartContract from './contract/driveSlowSafe';
 import {getAddress, getAdmin} from "./redux/actions/contract";
 
 const {ethereum} = window;
@@ -45,11 +44,7 @@ function App() {
   useEffect(() => {
       async function initApp() {
           dispatch(getAdmin());
-          try {
-              dispatch(getAddress(smartContract.options.address));
-          } catch (e) {
-              console.log("error getting contract address: ", e);
-          }
+          dispatch(getAddress());
 
           ethereum
               .request({method: 'eth_accounts'})

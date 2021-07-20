@@ -1,11 +1,12 @@
 import * as types from '../constants/types';
 import smartContract from '../../contract/driveSlowSafe';
 
-export function getAddress(address) {
+export function getAddress() {
+    const address = smartContract.options.address;
     return {
         type: types.contract.GET_ADDRESS,
         address
-    };
+    }
 }
 
 export function getAdmin() {
