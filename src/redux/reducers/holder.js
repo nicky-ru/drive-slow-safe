@@ -5,7 +5,7 @@ export function holder(state = initialState.holder, action) {
     switch (action.type) {
         case types.holder.GET: {
             let { rating, multiplier, penaltyMultiplier, accumulatedKM } = action;
-            return {...state, rating: rating, multiplier: multiplier, penaltyMultiplier: penaltyMultiplier, accumulatedKM: accumulatedKM};
+            return {...state, rating, multiplier, penaltyMultiplier, accumulatedKM};
         }
         default:
             return state;

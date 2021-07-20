@@ -1,6 +1,5 @@
 import * as types from '../constants/types';
 import smartContract from '../../contract/driveSlowSafe';
-import initialState from "../constants/initialState";
 
 export function getAddress() {
     const address = smartContract.options.address;

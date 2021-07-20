@@ -5,7 +5,7 @@ export function vehicle(state = initialState.vehicle, action) {
     switch (action.type) {
         case types.vehicle.GET: {
             let { brand, model, year } = action;
-            return {...state, brand: brand, model: model, year: year};
+            return {...state, brand, model, year};
         }
         default:
             return state;

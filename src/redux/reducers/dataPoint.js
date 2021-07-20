@@ -16,7 +16,7 @@ export function dataPoint(state = initialState.dataPoint, action) {
     switch (action.type) {
         case types.dataPoint.GET: {
             let { latitude, longitude, timestamp } = action;
-            return {...state, latitude: latitude, longitude: longitude, timestamp: timestamp};
+            return {...state, latitude, longitude, timestamp};
         }
         default:
             return state;
