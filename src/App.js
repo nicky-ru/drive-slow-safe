@@ -15,11 +15,12 @@ import {Device} from "./pages/Device";
 import {DataPoint} from "./pages/DataPoint";
 
 import { ErrorBoundary } from 'react-error-boundary';
-import {updateAccount} from "./redux/actions/wallet";
 import {ToolConfig} from "./pages/Admin/tools";
 import {Holder} from "./pages/Holder";
 import {Partner} from "./pages/Partner";
 import {getAddress, getAdmin} from "./redux/actions/contract";
+
+import {handleAccountChanged} from "./redux/actions/wallet";
 
 const {ethereum} = window;
 const ErrorFallback = ({ error, resetErrorBoundary }) => {
@@ -47,21 +48,15 @@ function App() {
 
       ethereum
           .request({method: 'eth_accounts'})
-          .then(handleAccountsChanged)
+          .then((accounts) => dispatch(handleAccountChanged(accounts)))
           .catch((err) => {
               console.error(err);
           })
 
-      ethereum.on('accountsChanged', handleAccountsChanged);
+      ethereum.on('accountsChanged', (accounts) => {
+          dispatch(handleAccountChanged(accounts))
+      });
   }, []);
-
-  const handleAccountsChanged = (accounts) => {
-    if (accounts.length === 0) {
-      console.log('Please connect to MetaMask.');
-    } else {
-      dispatch(updateAccount(accounts[0]));
-    }
-  }
 
   const handleConnect = () => {
     document.getElementById("connect-button").hidden = true;
@@ -69,7 +64,7 @@ function App() {
     ethereum
         .request({method: 'eth_requestAccounts'})
         .then((accounts) => {
-          handleAccountsChanged(accounts);
+          dispatch(handleAccountChanged(accounts));
           window.location.assign('/user');
         })
         .catch((err) => {
