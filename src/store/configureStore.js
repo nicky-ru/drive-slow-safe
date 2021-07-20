@@ -7,11 +7,24 @@ export default initialState => {
     if (store) {
         return store;
     }
-    const createdStore = createStore(
-        rootReducer,
-        initialState,
-        compose(applyMiddleware(thunk,), window.__REDUX_DEVTOOLS_EXTENSION__())
-    );
+    let createdStore;
+
+    if (window.__REDUX_DEVTOOLS_EXTENSION__) {
+        createdStore = createStore(
+            rootReducer,
+            initialState,
+            compose(applyMiddleware(thunk,),
+                window.__REDUX_DEVTOOLS_EXTENSION__()
+            )
+        );
+    } else {
+        createdStore = createStore(
+            rootReducer,
+            initialState,
+            compose(applyMiddleware(thunk,))
+        );
+    }
+
     store = createdStore;
     return store;
 };
