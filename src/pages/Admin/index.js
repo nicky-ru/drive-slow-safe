@@ -1,6 +1,6 @@
 import React from 'react'
 import { observer } from 'mobx-react-lite';
-import { Container, SimpleGrid, LinkBox, LinkOverlay, Text } from '@chakra-ui/react';
+import {Container, SimpleGrid, LinkBox, LinkOverlay, Text} from "@chakra-ui/layout"
 import { ToolConfig } from "./tools";
 
 
