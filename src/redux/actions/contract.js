@@ -63,9 +63,15 @@ export function setVehicles(vehicles) {
     };
 }
 
-export function setPartners(partners) {
-    return {
-        type: types.contract.LIST_PARTNERS,
-        partners,
-    };
+export function listPartners() {
+    return dispatch => {
+        return smartContract.methods.getPartnerIds().call()
+            .then(partners => {
+                dispatch({
+                    type: types.contract.LIST_PARTNERS,
+                    partners,
+                })
+            })
+            .catch(e => console.log("Error while dispatching listPartners: ", e));
+    }
 }

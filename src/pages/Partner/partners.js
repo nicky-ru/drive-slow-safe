@@ -1,25 +1,17 @@
 import React, {useEffect} from 'react';
 import {observer} from "mobx-react-lite";
-import {Container, Tab, TabList, TabPanel, TabPanels, Tabs} from '@chakra-ui/react';
+import {Tab, TabList, TabPanel, TabPanels, Tabs} from '@chakra-ui/react';
+import {Container} from "@chakra-ui/layout";
 import {PartnersList} from "../../components/Partner/partnersList";
 import {useDispatch, useSelector} from "react-redux";
-import smartContract from "../../contract/driveSlowSafe";
-import {setPartners} from "../../redux/actions/contract";
+import {listPartners} from "../../redux/actions/contract";
 
 export const Partners = observer(() => {
     const dispatch = useDispatch();
-    const currentAccount = useSelector((state) => state.wallet.address);
 
     useEffect(() => {
-        try {
-            smartContract.methods.getPartnerIds().call()
-                .then((partnersIds) => dispatch(setPartners(partnersIds)));
-        } catch (e) {
-            // handle error
-        }
-
-
-    }, [currentAccount]);
+        dispatch(listPartners());
+    }, []);
 
     return(
         <Container>
