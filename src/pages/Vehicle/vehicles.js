@@ -1,9 +1,9 @@
 import React, {useEffect} from 'react';
 import {observer} from "mobx-react-lite";
-import {Container, Tab, TabList, TabPanel, TabPanels, Tabs} from '@chakra-ui/react';
+import {Tab, TabList, TabPanel, TabPanels, Tabs} from '@chakra-ui/react';
+import {Container} from "@chakra-ui/layout";
 import {VehiclesListAdmin} from "../../components/Vehicle/vehiclesListAdmin";
-import smartContract from '../../contract/driveSlowSafe';
-import {setVehicles} from "../../redux/actions/contract";
+import {listVehicles} from "../../redux/actions/contract";
 import {useSelector, useDispatch} from "react-redux";
 
 export const Vehicles = observer(() => {
@@ -12,16 +12,10 @@ export const Vehicles = observer(() => {
     const admin = useSelector((state) => state.contract.admin);
 
     useEffect(() => {
-        if (currentAccount.toUpperCase() === admin.toUpperCase()) {
-            try {
-                smartContract.methods.getVehicleIds().call({from: admin})
-                    .then((vehicleIds) => dispatch(setVehicles(vehicleIds)));
-            } catch (e) {
-                // handle error
-            }
-
+        if (admin && (currentAccount.toUpperCase() === admin.toUpperCase())) {
+            dispatch(listVehicles(currentAccount));
         }
-    }, [currentAccount]);
+    }, [currentAccount, admin]);
 
     return(
         <Container>

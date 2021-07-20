@@ -62,11 +62,17 @@ export function listHolders(sender) {
     }
 }
 
-export function setVehicles(vehicles) {
-    return {
-        type: types.contract.LIST_VEHICLES,
-        vehicles,
-    };
+export function listVehicles(sender) {
+    return dispatch => {
+        return smartContract.methods.getVehicleIds().call({from: sender})
+            .then(vehicles => {
+                dispatch({
+                    type: types.contract.LIST_VEHICLES,
+                    vehicles,
+                })
+            })
+            .catch(e => console.log("Error while dispatching listVehicles: ", e));
+    }
 }
 
 export function listPartners() {
