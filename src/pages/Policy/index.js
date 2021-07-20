@@ -1,30 +1,18 @@
 import React, {useEffect} from 'react'
 import { observer } from 'mobx-react-lite';
 import {useParams} from 'react-router-dom';
-import smartContract from '../../contract/driveSlowSafe';
-import { Container, Heading } from '@chakra-ui/react';
+import { Container, Heading } from '@chakra-ui/layout';
 import {PolicyInfo} from "../../components/Policy/policyInfo";
 import {useDispatch} from "react-redux";
 
-import { getPolicy } from "../../redux/actions/policy";
+import { getPolicyById } from "../../redux/actions/policy";
 
 export const Policy = observer(() => {
     let { slug } = useParams();
     const dispatch = useDispatch();
 
     useEffect(() => {
-        try {
-            smartContract.methods.policies(slug).call()
-                .then((policy) => {
-                    dispatch(getPolicy(
-                        policy.isActive, policy.policyHolder, policy.vehicle,
-                        policy.device, policy.premium, policy.locked, policy.fundsUsed
-                    ));
-                });
-        } catch (e) {
-            // handle error
-        }
-
+        dispatch(getPolicyById(slug));
     }, []);
 
     return(

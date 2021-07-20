@@ -1,4 +1,5 @@
 import * as types from '../constants/types';
+import smartContract from "../../contract/driveSlowSafe";
 
 export function addPolicy(policyId, policy) {
     return {
@@ -8,15 +9,21 @@ export function addPolicy(policyId, policy) {
     };
 }
 
-export function getPolicy(status, holderId, vehicleId, deviceId, premium, lockedFunds, fundsUsed) {
-    return {
-        type: types.policy.GET,
-        status,
-        holderId,
-        vehicleId,
-        deviceId,
-        premium,
-        lockedFunds,
-        fundsUsed,
+export function getPolicyById(policyId) {
+    return dispatch => {
+        return smartContract.methods.policies(policyId).call()
+            .then(policy => {
+                dispatch({
+                    type: types.policy.GET,
+                    status: policy.status,
+                    holderId: policy.holderId,
+                    vehicleId: policy.vehicleId,
+                    deviceId: policy.deviceId,
+                    premium: policy.premium,
+                    lockedFunds: policy.lockedFunds,
+                    fundsUsed: policy.fundsUsed,
+                })
+            })
+            .catch(e => console.log("Error while dispatching getPolicyById: ", e));
     }
 }

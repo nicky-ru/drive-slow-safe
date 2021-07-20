@@ -23,11 +23,17 @@ export function getAdmin() {
     }
 }
 
-export function setPolicies(policies) {
-    return {
-        type: types.contract.LIST_POLICIES,
-        policies,
-    };
+export function listPolicies(sender) {
+    return dispatch => {
+        return smartContract.methods.getPolicyIds().call({from: sender})
+            .then(policies => {
+                dispatch({
+                    type: types.contract.LIST_POLICIES,
+                    policies,
+                })
+            })
+            .catch(e => console.log("Error while dispatching listPolicies: ", e));
+    }
 }
 
 export function listDeviceIds(sender) {

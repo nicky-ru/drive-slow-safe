@@ -1,9 +1,9 @@
 import React, {useEffect} from 'react';
 import {observer} from "mobx-react-lite";
-import {Container, Tab, TabList, TabPanel, TabPanels, Tabs} from '@chakra-ui/react';
+import {Tab, TabList, TabPanel, TabPanels, Tabs} from '@chakra-ui/react';
+import {Container} from "@chakra-ui/layout";
 
-import smartContract from '../../contract/driveSlowSafe';
-import {setPolicies} from "../../redux/actions/contract";
+import {listPolicies} from "../../redux/actions/contract";
 import {useSelector, useDispatch} from "react-redux";
 import {PolicyListAdmin} from "../../components/Policy/policyListAdmin";
 
@@ -13,16 +13,10 @@ export const Policies = observer(() => {
     const admin = useSelector((state) => state.contract.admin);
 
     useEffect(() => {
-        if (currentAccount.toUpperCase() === admin.toUpperCase()) {
-            try {
-                smartContract.methods.getPolicyIds().call({from: admin})
-                    .then((policyIds) => dispatch(setPolicies(policyIds)));
-            } catch (e) {
-                // handle error
-            }
-
+        if (admin && (currentAccount.toUpperCase() === admin.toUpperCase())) {
+            dispatch(listPolicies(currentAccount));
         }
-    }, [currentAccount]);
+    }, [currentAccount, admin]);
 
     return(
         <Container>
