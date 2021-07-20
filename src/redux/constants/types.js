@@ -15,8 +15,8 @@ export const contract = {
 export const user = {
     UPDATE: 'dss/user/update',
     IS_ADMIN: 'dss/user/isAdmin',
-    SET_POLICIES: 'dss/user/setPolicies',
-    SET_PENALTIES: 'dss/user/setPenalties',
+    LIST_POLICIES: 'dss/user/setPolicies',
+    LIST_PENALTIES: 'dss/user/setPenalties',
 }
 
 export const holder = {
