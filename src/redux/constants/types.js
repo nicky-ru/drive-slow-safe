@@ -5,11 +5,11 @@ export const wallet = {
 export const contract = {
     GET_ADDRESS: 'dss/contract/getAddress',
     GET_ADMIN: 'dss/contract/getAdmin',
-    SET_POLICIES: 'dss/contract/setPolicies',
+    LIST_POLICIES: 'dss/contract/listPolicies',
     LIST_DEVICES: 'dss/contract/listDevices',
-    SET_HOLDERS: 'dss/contract/setHolders',
-    SET_VEHICLES: 'dss/contract/setVehicles',
-    SET_PARTNERS: 'dss/contract/setPartners',
+    LIST_HOLDERS: 'dss/contract/listHolders',
+    LIST_VEHICLES: 'dss/contract/listVehicles',
+    LIST_PARTNERS: 'dss/contract/listPartners',
 }
 
 export const user = {

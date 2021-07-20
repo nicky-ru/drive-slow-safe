@@ -1,10 +1,10 @@
 import React, {useEffect} from 'react';
 import {observer} from "mobx-react-lite";
-import {Container, Tab, TabList, TabPanel, TabPanels, Tabs} from '@chakra-ui/react';
+import {Tab, TabList, TabPanel, TabPanels, Tabs} from '@chakra-ui/react';
+import {Container} from "@chakra-ui/layout";
 import {HoldersList} from "../../components/Holder/holdersList";
 import {useDispatch, useSelector} from "react-redux";
-import smartContract from "../../contract/driveSlowSafe";
-import {setHolders} from "../../redux/actions/contract";
+import {listHolders} from "../../redux/actions/contract";
 
 export const Holders = observer(() => {
     const dispatch = useDispatch();
@@ -12,16 +12,10 @@ export const Holders = observer(() => {
     const admin = useSelector((state) => state.contract.admin);
 
     useEffect(() => {
-        if (currentAccount.toUpperCase() === admin.toUpperCase()) {
-            try {
-                smartContract.methods.getHoldersIds().call({from: admin})
-                    .then((holdersIds) => dispatch(setHolders(holdersIds)));
-            } catch (e) {
-                // handle error
-            }
-
+        if (admin && (currentAccount.toUpperCase() === admin.toUpperCase())) {
+            dispatch(listHolders(currentAccount));
         }
-    }, [currentAccount]);
+    }, [currentAccount, admin]);
 
     return(
         <Container>

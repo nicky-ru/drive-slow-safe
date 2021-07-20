@@ -9,19 +9,19 @@ export function contract(state = initialState.contract, action) {
         case types.contract.GET_ADMIN: {
             return {...state, admin: action.admin};
         }
-        case types.contract.SET_POLICIES: {
+        case types.contract.LIST_POLICIES: {
             return {...state, policies: action.policies};
         }
         case types.contract.LIST_DEVICES: {
             return {...state, devices: action.devices};
         }
-        case types.contract.SET_HOLDERS: {
+        case types.contract.LIST_HOLDERS: {
             return {...state, holders: action.holders};
         }
-        case types.contract.SET_VEHICLES: {
+        case types.contract.LIST_VEHICLES: {
             return {...state, vehicles: action.vehicles};
         }
-        case types.contract.SET_PARTNERS: {
+        case types.contract.LIST_PARTNERS: {
             return {...state, partners: action.partners};
         }
         default:

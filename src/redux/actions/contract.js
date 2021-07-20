@@ -25,7 +25,7 @@ export function getAdmin() {
 
 export function setPolicies(policies) {
     return {
-        type: types.contract.SET_POLICIES,
+        type: types.contract.LIST_POLICIES,
         policies,
     };
 }
@@ -43,23 +43,29 @@ export function listDeviceIds(sender) {
     }
 }
 
-export function setHolders(holders) {
-    return {
-        type: types.contract.SET_HOLDERS,
-        holders,
-    };
+export function listHolders(sender) {
+    return dispatch => {
+        return smartContract.methods.getHoldersIds().call({from: sender})
+            .then(holders => {
+                dispatch({
+                    type: types.contract.LIST_HOLDERS,
+                    holders
+                })
+            })
+            .catch(e => console.log("Error while dispatching listHolders: ", e));
+    }
 }
 
 export function setVehicles(vehicles) {
     return {
-        type: types.contract.SET_VEHICLES,
+        type: types.contract.LIST_VEHICLES,
         vehicles,
     };
 }
 
 export function setPartners(partners) {
     return {
-        type: types.contract.SET_PARTNERS,
+        type: types.contract.LIST_PARTNERS,
         partners,
     };
 }
