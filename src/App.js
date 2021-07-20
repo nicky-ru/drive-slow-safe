@@ -42,19 +42,15 @@ function App() {
   const address = useSelector((state) => state.wallet.address);
 
   useEffect(() => {
-      async function initApp() {
-          dispatch(getAdmin());
-          dispatch(getAddress());
+      dispatch(getAdmin());
+      dispatch(getAddress());
 
-          ethereum
-              .request({method: 'eth_accounts'})
-              .then(handleAccountsChanged)
-              .catch((err) => {
-                  console.error(err);
-              })
-      }
-
-      initApp();
+      ethereum
+          .request({method: 'eth_accounts'})
+          .then(handleAccountsChanged)
+          .catch((err) => {
+              console.error(err);
+          })
 
       ethereum.on('accountsChanged', handleAccountsChanged);
   }, []);
