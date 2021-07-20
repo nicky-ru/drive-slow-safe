@@ -1,11 +1,10 @@
 import React, {useEffect} from 'react'
 import { observer } from 'mobx-react-lite';
 import {useParams} from 'react-router-dom';
-import smartContract from '../../contract/driveSlowSafe';
-import { Container, Heading } from '@chakra-ui/react';
+import {Container, Heading} from '@chakra-ui/layout';
 import {useDispatch} from "react-redux";
 
-import {getDevice} from "../../redux/actions/device";
+import {getDeviceById} from "../../redux/actions/device";
 import {DeviceInfo} from "../../components/Device/deviceInfo";
 
 export const Device = observer(() => {
@@ -13,15 +12,7 @@ export const Device = observer(() => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        try {
-            smartContract.methods.devices(slug).call()
-                .then((device) => {
-                    dispatch(getDevice(device.imei, device.hasOrder, device.status, device.policy));
-                });
-        } catch (e) {
-            // handle error
-        }
-
+        dispatch(getDeviceById(slug));
     }, []);
 
     return(
