@@ -6,7 +6,7 @@ export const contract = {
     GET_ADDRESS: 'dss/contract/getAddress',
     GET_ADMIN: 'dss/contract/getAdmin',
     SET_POLICIES: 'dss/contract/setPolicies',
-    SET_DEVICES: 'dss/contract/setDevices',
+    LIST_DEVICES: 'dss/contract/listDevices',
     SET_HOLDERS: 'dss/contract/setHolders',
     SET_VEHICLES: 'dss/contract/setVehicles',
     SET_PARTNERS: 'dss/contract/setPartners',

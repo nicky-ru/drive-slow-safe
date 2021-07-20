@@ -2,8 +2,7 @@ import React, {useEffect} from 'react';
 import {observer} from "mobx-react-lite";
 import {Container, Tab, TabList, TabPanel, TabPanels, Tabs} from '@chakra-ui/react';
 
-import smartContract from '../../contract/driveSlowSafe';
-import {setDevices} from "../../redux/actions/contract";
+import {listDeviceIds} from "../../redux/actions/contract";
 import {useSelector, useDispatch} from "react-redux";
 import {DevicesListAdmin} from "../../components/Device/deviceListAdmin";
 
@@ -13,13 +12,10 @@ export const Devices = observer(() => {
     const admin = useSelector((state) => state.contract.admin);
 
     useEffect(() => {
-        if (currentAccount.toUpperCase() === admin.toUpperCase()) {
-            try {
-                smartContract.methods.getDeviceIds().call({from: admin})
-                    .then((deviceIds) => dispatch(setDevices(deviceIds)));
-            } catch (e) {}
+        if (admin && (currentAccount.toUpperCase() === admin.toUpperCase())) {
+            dispatch(listDeviceIds(currentAccount));
         }
-    }, [currentAccount]);
+    }, [currentAccount, admin]);
 
     return(
         <Container>

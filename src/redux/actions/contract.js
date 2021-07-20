@@ -1,5 +1,6 @@
 import * as types from '../constants/types';
 import smartContract from '../../contract/driveSlowSafe';
+import initialState from "../constants/initialState";
 
 export function getAddress() {
     const address = smartContract.options.address;
@@ -29,11 +30,17 @@ export function setPolicies(policies) {
     };
 }
 
-export function setDevices(devices) {
-    return {
-        type: types.contract.SET_DEVICES,
-        devices,
-    };
+export function listDeviceIds(sender) {
+    return dispatch => {
+        return smartContract.methods.getDeviceIds().call({from: sender})
+            .then(devices => {
+                dispatch({
+                    type: types.contract.LIST_DEVICES,
+                    devices,
+                })
+            })
+            .catch(e => console.log("Error while dispatching listDeviceIds: ", e));
+    }
 }
 
 export function setHolders(holders) {

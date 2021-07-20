@@ -12,7 +12,7 @@ export function contract(state = initialState.contract, action) {
         case types.contract.SET_POLICIES: {
             return {...state, policies: action.policies};
         }
-        case types.contract.SET_DEVICES: {
+        case types.contract.LIST_DEVICES: {
             return {...state, devices: action.devices};
         }
         case types.contract.SET_HOLDERS: {
