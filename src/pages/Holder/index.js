@@ -1,11 +1,10 @@
 import React, {useEffect} from 'react'
 import { observer } from 'mobx-react-lite';
 import {useParams} from 'react-router-dom';
-import smartContract from '../../contract/driveSlowSafe';
-import { Container, Heading } from '@chakra-ui/react';
+import { Container, Heading } from '@chakra-ui/layout';
 import {useDispatch} from "react-redux";
 
-import {getHolder} from "../../redux/actions/holder";
+import {getHolderById} from "../../redux/actions/holder";
 import {HolderInfo} from "../../components/Holder/holderInfo";
 
 export const Holder = observer(() => {
@@ -13,15 +12,7 @@ export const Holder = observer(() => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        try {
-            smartContract.methods.holders(slug).call()
-                .then((holder) => {
-                    dispatch(getHolder(holder.rating, holder.multiplier, holder.penaltyMultiplier, holder.accumulatedKM));
-                });
-        } catch (e) {
-            // handle error
-        }
-
+        dispatch(getHolderById(slug));
     }, []);
 
     return(

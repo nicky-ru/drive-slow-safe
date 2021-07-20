@@ -15,15 +15,11 @@ export function getDataPointById(dataPointId) {
     return dispatch => {
         return smartContract.methods.dataPoints(dataPointId).call()
             .then(dataPoint => {
-                const latitude = dataPoint.latitude;
-                const longitude = dataPoint.longitude;
-                const timestamp = dataPoint.timestamp;
-
                 dispatch({
                     type: types.dataPoint.GET,
-                    latitude,
-                    longitude,
-                    timestamp
+                    latitude: dataPoint.latitude,
+                    longitude: dataPoint.longitude,
+                    timestamp: dataPoint.timestamp
                 })
             })
             .catch(e => console.log("Error while dispatching getDataPoint: ", e));
