@@ -44,12 +44,7 @@ function App() {
 
   useEffect(() => {
       async function initApp() {
-          try {
-              let admin = await smartContract.methods.administrator().call();
-              dispatch(getAdmin(admin));
-          } catch (e) {
-              console.log("error getting contract admin: ", e);
-          }
+          dispatch(getAdmin());
           try {
               dispatch(getAddress(smartContract.options.address));
           } catch (e) {

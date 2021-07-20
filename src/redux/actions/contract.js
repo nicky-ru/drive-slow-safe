@@ -1,4 +1,5 @@
 import * as types from '../constants/types';
+import smartContract from '../../contract/driveSlowSafe';
 
 export function getAddress(address) {
     return {
@@ -7,11 +8,17 @@ export function getAddress(address) {
     };
 }
 
-export function getAdmin(admin) {
-    return {
-        type: types.contract.GET_ADMIN,
-        admin
-    };
+export function getAdmin() {
+    return dispatch => {
+        return smartContract.methods.administrator().call()
+            .then(admin => {
+                dispatch({
+                    type: types.contract.GET_ADMIN,
+                    admin
+                })
+            })
+            .catch(e => console.log("Error while dispatching getAdmin: ", e));
+    }
 }
 
 export function setPolicies(policies) {
