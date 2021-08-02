@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.5.13;
-// Todo: add safemath
+import "@openzeppelin/contracts/math/SafeMath.sol";
 // Todo: review uint sizes and downgrade where possible
 // Todo: add pagination on getters
 // Todo: add events
@@ -8,6 +8,9 @@ pragma solidity ^0.5.13;
 
 /** @title Drive Slow Safe. */
 contract DriveSlowSafe {
+
+    using SafeMath for uint256;
+    using SafeMath for uint32;
 
     // Upon signing a transaction a user automatically becomes a policy holder
     struct Holder {
@@ -188,13 +191,13 @@ contract DriveSlowSafe {
         bytes32 _vehicleId = registerVehicle(_brand, _model, _year);  // register vehicle
         // policy
         bytes32 hash = keccak256(abi.encodePacked(msg.sender, _vehicleId, _device, msg.value));  // generate ID for Policy
-        uint256 toLock = holders[msg.sender].multiplier * msg.value;  // calculate an amount to lock by smart contract
+        uint256 toLock = holders[msg.sender].multiplier.mul(msg.value);  // calculate an amount to lock by smart contract
         require(toLock <= balance, "The contract balance is insufficient to guarantee this policy");
         policies[hash] = Policy(true, msg.sender, _vehicleId, _device, msg.value, toLock, 0);  // create a new policy
         policyIDs.push(hash);  // record new policy id
         // contract
-        balance -= toLock;  // remove guarantee funds locked into the policy
-        balance += msg.value;  // add premium payed by the user
+        balance = balance.sub(toLock);  // remove guarantee funds locked into the policy
+        balance = balance.add(msg.value);  // add premium payed by the user
         // device
         devices[_device].policy = hash;  // connect device to the policy
         devices[_device].hasOrder = true;  // activate device (Todo: remove)
@@ -212,16 +215,16 @@ contract DriveSlowSafe {
         require(policies[_policy].policyHolder == msg.sender, "Only the holder of the policy can claim funds");
 
         // maximum amount of funds claimable from the chosen policy with applied penalty multiplier
-        uint256 claimable = holders[msg.sender].penaltyMultiplier * policies[_policy].locked / theta;
+        uint256 claimable = holders[msg.sender].penaltyMultiplier.mul(policies[_policy].locked).div(theta);
         // the amount of funds that user claims without applying penalties
-        uint256 cleanGrant = holders[msg.sender].multiplier * msg.value;
+        uint256 cleanGrant = holders[msg.sender].multiplier.mul(msg.value);
         // the amount of funds that user claims with applying penalties
-        uint256 grant = cleanGrant * holders[msg.sender].penaltyMultiplier / theta;
+        uint256 grant = cleanGrant.mul(holders[msg.sender].penaltyMultiplier).div(theta);
         require(grant <= claimable, "The claimable amount exceeds the limit");
 
-        uint256 toPay = msg.value + grant;  // the funds that the contract should transfer to the partner
-        policies[_policy].locked -= cleanGrant;  // remove claimed funds from the policy
-        policies[_policy].fundsUsed += grant;  // record the claimed funds amount
+        uint256 toPay = grant.add(msg.value);  // the funds that the contract should transfer to the partner
+        policies[_policy].locked = policies[_policy].locked.sub(cleanGrant);  // remove claimed funds from the policy
+        policies[_policy].fundsUsed = grant.add(policies[_policy].fundsUsed);  // record the claimed funds amount
 
         _partner.transfer(toPay);
     }
@@ -283,7 +286,7 @@ contract DriveSlowSafe {
         // Todo: only in the case if the user had no penalties
         updateRating(policies[_policy].policyHolder, true);
 
-        balance += unlocking;
+        balance = unlocking.add(balance);
     }
 
     /************************************************/
@@ -294,14 +297,14 @@ contract DriveSlowSafe {
         require(!holders[_holderAddress].isActive, "The account has already been activated");
         holders[_holderAddress].isActive = true;
         holders[_holderAddress].rating = initialRating;
-        holders[_holderAddress].multiplier = alpha * initialRating;
+        holders[_holderAddress].multiplier = alpha.mul(initialRating);
         holders[_holderAddress].penaltyMultiplier = theta;
         holdersIDs.push(_holderAddress);
     }
 
     /** @dev updates users multiplier based on alpha and user's rating */
     function updateMultiplier(address _holderAddress) internal {
-        holders[_holderAddress].multiplier = alpha * holders[_holderAddress].rating;
+        holders[_holderAddress].multiplier = alpha.mul(holders[_holderAddress].rating);
     }
 
     /** @dev updates the rating of the user after getting a bonus or a penalty
@@ -312,10 +315,10 @@ contract DriveSlowSafe {
         uint256 prevState = holders[_holderAddress].rating;
 
         if (_positive) {
-            holders[_holderAddress].rating = holders[_holderAddress].rating + 1;
+            holders[_holderAddress].rating = holders[_holderAddress].rating.add(1);
         } else {
             if (holders[_holderAddress].rating > 1) {
-                holders[_holderAddress].rating = holders[_holderAddress].rating - 1;
+                holders[_holderAddress].rating = holders[_holderAddress].rating.sub(1);
             }
         }
         if (prevState != holders[_holderAddress].rating) {
@@ -357,7 +360,7 @@ contract DriveSlowSafe {
         holders[_holder].penalties.push(_dataPoint);  // save penalty
         // update user's penalty multiplier
         uint256 _penaltyMultiplier = holders[_holder].penaltyMultiplier;
-        _penaltyMultiplier -= 1;
+        _penaltyMultiplier = _penaltyMultiplier.sub(1);
         // penalty multiplier cannot be 0, or user won't be able to claim funds at all
         if (_penaltyMultiplier > 0) {
             holders[_holder].penaltyMultiplier = _penaltyMultiplier;
