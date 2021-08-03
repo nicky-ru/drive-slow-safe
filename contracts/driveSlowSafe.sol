@@ -8,7 +8,6 @@ import "@openzeppelin/contracts/math/SafeMath.sol";
 
 /** @title Drive Slow Safe. */
 contract DriveSlowSafe {
-
     using SafeMath for uint256;
     using SafeMath for uint32;
 
@@ -135,11 +134,7 @@ contract DriveSlowSafe {
 
         devices[_walletAddress].imei = _imei;
 
-        if (msg.sender == administrator) {
-            devices[_walletAddress].status = Status.whitelisted;
-        } else {
-            devices[_walletAddress].status = Status.waitingApproval;
-        }
+        devices[_walletAddress].status = Status.whitelisted;
         deviceIDs.push(_walletAddress);  // POSSIBLE BUG may create duplicated entry
     }
 
